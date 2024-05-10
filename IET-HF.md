@@ -1,5 +1,5 @@
 # Elvégzendő feladatok
 - Build keretrendszer beüzemelése (Maven, Github Actions) (Balázs)
-- Manuális kód átvizsgálás + Statikus analízis (SonarCloud) (Eszter, Viktor)
+- Manuális kód átvizsgálás + Statikus analízis (SonarCloud) (Eszter, Péter)
 - Nem funkcionális jellemzők / UI Tesztek (Barnabás, Márton) Cél: Játékban történő csalás lehetőségének felderítése.
 - Manuális tesztek (Barnabás, Márton)
