@@ -1,8 +1,5 @@
 package org.bme.mit.iet.view;
 
-
-
-
 import org.bme.mit.iet.Game;
 
 import javax.swing.*;

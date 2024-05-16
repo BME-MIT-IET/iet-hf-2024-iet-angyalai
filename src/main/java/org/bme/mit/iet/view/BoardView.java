@@ -1,6 +1,5 @@
 package org.bme.mit.iet.view;
 
-
 import org.bme.mit.iet.Game;
 import org.bme.mit.iet.field.Field;
 import org.bme.mit.iet.player.Player;

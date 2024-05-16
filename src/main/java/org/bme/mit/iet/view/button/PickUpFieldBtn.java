@@ -1,6 +1,5 @@
 package org.bme.mit.iet.view.button;
 
-
 import org.bme.mit.iet.Game;
 import org.bme.mit.iet.field.Field;
 import org.bme.mit.iet.view.GameView;

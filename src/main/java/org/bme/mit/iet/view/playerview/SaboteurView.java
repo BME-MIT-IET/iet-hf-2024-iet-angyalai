@@ -1,6 +1,5 @@
 package org.bme.mit.iet.view.playerview;
 
-
 import org.bme.mit.iet.player.Player;
 
 import javax.imageio.ImageIO;

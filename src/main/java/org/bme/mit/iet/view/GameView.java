@@ -1,6 +1,5 @@
 package org.bme.mit.iet.view;
 
-
 import javax.swing.*;
 import java.awt.*;
 
