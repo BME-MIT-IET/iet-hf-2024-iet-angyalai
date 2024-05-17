@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class FileHandler {
+    private static final String PIPES = "pipes";
+
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
         f.put("game", game.toJSON());
@@ -276,7 +278,7 @@ public class FileHandler {
             jo = (JSONObject) game.get("Board");
 
             //Create fields
-            ArrayList<Field> pipes = createPipes(jo, "pipes");
+            ArrayList<Field> pipes = createPipes(jo, PIPES);
             ArrayList<Field> pumps = createPumps(jo, "pumps");
             ArrayList<Field> srcs = createSources(jo, "srcs");
             ArrayList<Field> dests = createDestinations(jo, "dests");
@@ -295,7 +297,7 @@ public class FileHandler {
             players.addAll(sabs);
 
             //Set missing attributes
-            setPipeAttributes(jo, "pipes", pipes, fields, players);
+            setPipeAttributes(jo, PIPES, pipes, fields, players);
             setPumpAttributes(jo, "pumps", pumps, fields, players);
             setSourceAttributes(jo, "srcs", srcs, fields, players);
             setDestinationAttributes(jo, "dests", dests, fields, players);
@@ -399,7 +401,7 @@ public class FileHandler {
             JSONObject object = (JSONObject) itr1.next();
 
             ArrayList<Field> neighbours_b = new ArrayList<>();
-            JSONArray neighbours = (JSONArray) object.get("pipes");
+            JSONArray neighbours = (JSONArray) object.get(PIPES);
             Iterator itr2 = neighbours.iterator();
             while (itr2.hasNext()) {
                 long neighbour = (long) itr2.next();
@@ -475,7 +477,7 @@ public class FileHandler {
             JSONObject object = (JSONObject) itr1.next();
 
             ArrayList<Field> neighbours_b = new ArrayList<>();
-            JSONArray neighbours = (JSONArray) object.get("pipes");
+            JSONArray neighbours = (JSONArray) object.get(PIPES);
             Iterator itr2 = neighbours.iterator();
             while (itr2.hasNext()) {
                 long neighbour = (long) itr2.next();
@@ -514,7 +516,7 @@ public class FileHandler {
             object_b.setId((int) (long) object.get("id"));
 
             int i = 0;
-            JSONArray pipes = (JSONArray) object.get("pipes");
+            JSONArray pipes = (JSONArray) object.get(PIPES);
             Iterator itr2 = pipes.iterator();
             while (itr2.hasNext()) {
                 long pipe = (long) itr2.next();
@@ -547,7 +549,7 @@ public class FileHandler {
             object_b.setId((int) (long) object.get("id"));
 
             int i = 0;
-            JSONArray pipes = (JSONArray) object.get("pipes");
+            JSONArray pipes = (JSONArray) object.get(PIPES);
             Iterator itr2 = pipes.iterator();
             while (itr2.hasNext()) {
                 long pipe = (long) itr2.next();
