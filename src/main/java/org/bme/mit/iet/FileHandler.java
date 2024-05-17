@@ -21,10 +21,8 @@ public class FileHandler {
         JSONObject f = new JSONObject();
         f.put("game", game.toJSON());
 
-        try {
-            FileWriter file = new FileWriter(filename);
+        try(FileWriter file = new FileWriter(filename)) {
             file.write(f.toJSONString());
-            file.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
