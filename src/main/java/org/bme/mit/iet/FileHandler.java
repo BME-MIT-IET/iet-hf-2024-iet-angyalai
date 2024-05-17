@@ -24,6 +24,7 @@ public class FileHandler {
     private static final String IS_WORKING = "isWorking";
     private static final String ALREADY_MOVED_WATER = "alreadyMovedWater";
     private static final String PLAYERS = "players";
+    private static final String INLET = "inlet";
 
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
@@ -415,7 +416,7 @@ public class FileHandler {
             }
             pumps_l.get(i).setNeighbours(neighbours_b);
 
-            pumps_l.get(i).setInOutlet(object.get("inlet") != null ? searchField(fields_l, (int) (long) object.get("inlet")) : null,
+            pumps_l.get(i).setInOutlet(object.get(INLET) != null ? searchField(fields_l, (int) (long) object.get(INLET)) : null,
                     object.get("outlet") != null ? searchField(fields_l, (int) (long) object.get("outlet")) : null);
 
             ArrayList<Player> players_b = new ArrayList<Player>();
@@ -491,7 +492,7 @@ public class FileHandler {
             }
             pumps_l.get(i).setNeighbours(neighbours_b);
 
-            pumps_l.get(i).setInOutlet(object.get("inlet") != null ? searchField(fields_l, (int) (long) object.get("inlet")) : null,
+            pumps_l.get(i).setInOutlet(object.get(INLET) != null ? searchField(fields_l, (int) (long) object.get(INLET)) : null,
                     object.get("outlet") != null ? searchField(fields_l, (int) (long) object.get("outlet")) : null);
 
             ArrayList<Player> players_b = new ArrayList<Player>();
