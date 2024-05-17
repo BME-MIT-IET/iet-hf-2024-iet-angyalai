@@ -25,6 +25,7 @@ public class FileHandler {
     private static final String ALREADY_MOVED_WATER = "alreadyMovedWater";
     private static final String PLAYERS = "players";
     private static final String INLET = "inlet";
+    private static final String OUTLET = "outlet";
 
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
@@ -417,7 +418,7 @@ public class FileHandler {
             pumps_l.get(i).setNeighbours(neighbours_b);
 
             pumps_l.get(i).setInOutlet(object.get(INLET) != null ? searchField(fields_l, (int) (long) object.get(INLET)) : null,
-                    object.get("outlet") != null ? searchField(fields_l, (int) (long) object.get("outlet")) : null);
+                    object.get(OUTLET) != null ? searchField(fields_l, (int) (long) object.get(OUTLET)) : null);
 
             ArrayList<Player> players_b = new ArrayList<Player>();
             JSONArray players = (JSONArray) object.get(PLAYERS);
@@ -493,7 +494,7 @@ public class FileHandler {
             pumps_l.get(i).setNeighbours(neighbours_b);
 
             pumps_l.get(i).setInOutlet(object.get(INLET) != null ? searchField(fields_l, (int) (long) object.get(INLET)) : null,
-                    object.get("outlet") != null ? searchField(fields_l, (int) (long) object.get("outlet")) : null);
+                    object.get(OUTLET) != null ? searchField(fields_l, (int) (long) object.get(OUTLET)) : null);
 
             ArrayList<Player> players_b = new ArrayList<Player>();
             JSONArray players = (JSONArray) object.get(PLAYERS);

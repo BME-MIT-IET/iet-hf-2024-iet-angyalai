@@ -62,6 +62,10 @@ public class Game {
      * Az adott korben hany jatekos kerult mar sorra
      */
     private int alreadyPlayed;
+    /**
+     * A véletlenszám-generátor
+     */
+    private Random random = new Random();
 
     private Game() {
     }
@@ -82,7 +86,6 @@ public class Game {
         Field.setIdCount(0);
         Player.setIdCount(0);
         board = null;
-        var random = new Random();
         var numberOfPlayers = numberOfPlums + numberOfSabs;
         var numberOfDest = Math.round(numberOfPlayers / 2) + 1;
         var numberOfSrc = Math.round(numberOfPlayers / 2) + 1;
@@ -214,9 +217,8 @@ public class Game {
      * Veletlenszeruen kivalaszt egy pumpat es elrontja.
      */
     public void generatePumpError() {
-        Random rand = new Random();
         var pumps = board.getPumps();
-        pumps.get(rand.nextInt(pumps.size())).breakField();
+        pumps.get(random.nextInt(pumps.size())).breakField();
     }
 
     /**
