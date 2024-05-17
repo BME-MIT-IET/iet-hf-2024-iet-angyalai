@@ -22,6 +22,7 @@ public class FileHandler {
     private static final String CURRENT_WATER_LEVEL = "currentWaterLevel";
     private static final String CAPACITY = "capacity";
     private static final String IS_WORKING = "isWorking";
+    private static final String ALREADY_MOVED_WATER = "alreadyMovedWater";
 
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
@@ -333,7 +334,7 @@ public class FileHandler {
             object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
             object_b.setCapacity((int) (long) object.get(CAPACITY));
             object_b.setWorking((boolean) object.get(IS_WORKING));
-            object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
+            object_b.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
             object_b.setId((int) (long) object.get("id"));
             //Pipe specific
             object_b.setPiercedCounter((int) (long) object.get("piercedCounter"));
@@ -388,7 +389,7 @@ public class FileHandler {
             object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
             object_b.setCapacity((int) (long) object.get(CAPACITY));
             object_b.setWorking((boolean) object.get(IS_WORKING));
-            object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
+            object_b.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
             object_b.setId((int) (long) object.get("id"));
             //Pump specific
 
@@ -440,7 +441,7 @@ public class FileHandler {
             object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
             object_b.setCapacity((int) (long) object.get(CAPACITY));
             object_b.setWorking((boolean) object.get(IS_WORKING));
-            object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
+            object_b.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
             object_b.setId((int) (long) object.get("id"));
             //Pump specific
 
@@ -464,7 +465,7 @@ public class FileHandler {
             object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
             object_b.setCapacity((int) (long) object.get(CAPACITY));
             object_b.setWorking((boolean) object.get(IS_WORKING));
-            object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
+            object_b.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
             object_b.setId((int) (long) object.get("id"));
             //Pump specific
 
