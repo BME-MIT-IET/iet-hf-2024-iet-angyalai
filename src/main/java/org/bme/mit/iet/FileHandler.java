@@ -19,6 +19,7 @@ import java.util.Iterator;
 public class FileHandler {
     private static final String PIPES = "pipes";
     private static final String PUMPS = "pumps";
+    private static final String CURRENT_WATER_LEVEL = "currentWaterLevel";
 
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
@@ -327,7 +328,7 @@ public class FileHandler {
             JSONObject object = (JSONObject) itr1.next();
             Field object_b = new Pipe();
             //Field
-            object_b.setCurrentWaterLevel((int) (long) object.get("currentWaterLevel"));
+            object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
             object_b.setCapacity((int) (long) object.get("capacity"));
             object_b.setWorking((boolean) object.get("isWorking"));
             object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
@@ -382,7 +383,7 @@ public class FileHandler {
             JSONObject object = (JSONObject) itr1.next();
             Field object_b = new Pump();
             //Field
-            object_b.setCurrentWaterLevel((int) (long) object.get("currentWaterLevel"));
+            object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
             object_b.setCapacity((int) (long) object.get("capacity"));
             object_b.setWorking((boolean) object.get("isWorking"));
             object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
@@ -434,7 +435,7 @@ public class FileHandler {
             JSONObject object = (JSONObject) itr1.next();
             Field object_b = new Source();
             //Field
-            object_b.setCurrentWaterLevel((int) (long) object.get("currentWaterLevel"));
+            object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
             object_b.setCapacity((int) (long) object.get("capacity"));
             object_b.setWorking((boolean) object.get("isWorking"));
             object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
@@ -458,7 +459,7 @@ public class FileHandler {
             JSONObject object = (JSONObject) itr1.next();
             Field object_b = new Destination();
             //Field
-            object_b.setCurrentWaterLevel((int) (long) object.get("currentWaterLevel"));
+            object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
             object_b.setCapacity((int) (long) object.get("capacity"));
             object_b.setWorking((boolean) object.get("isWorking"));
             object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
