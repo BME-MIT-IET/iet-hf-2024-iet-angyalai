@@ -23,6 +23,7 @@ public class FileHandler {
     private static final String CAPACITY = "capacity";
     private static final String IS_WORKING = "isWorking";
     private static final String ALREADY_MOVED_WATER = "alreadyMovedWater";
+    private static final String PLAYERS = "players";
 
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
@@ -365,7 +366,7 @@ public class FileHandler {
             pipes_l.get(i).setNeighbours(neighbours_b);
 
             ArrayList<Player> players_b = new ArrayList<>();
-            JSONArray players = (JSONArray) object.get("players");
+            JSONArray players = (JSONArray) object.get(PLAYERS);
             itr2 = players.iterator();
             while (itr2.hasNext()) {
                 long player = (long) itr2.next();
@@ -418,7 +419,7 @@ public class FileHandler {
                     object.get("outlet") != null ? searchField(fields_l, (int) (long) object.get("outlet")) : null);
 
             ArrayList<Player> players_b = new ArrayList<Player>();
-            JSONArray players = (JSONArray) object.get("players");
+            JSONArray players = (JSONArray) object.get(PLAYERS);
             itr2 = players.iterator();
             while (itr2.hasNext()) {
                 long player = (long) itr2.next();
@@ -494,7 +495,7 @@ public class FileHandler {
                     object.get("outlet") != null ? searchField(fields_l, (int) (long) object.get("outlet")) : null);
 
             ArrayList<Player> players_b = new ArrayList<Player>();
-            JSONArray players = (JSONArray) object.get("players");
+            JSONArray players = (JSONArray) object.get(PLAYERS);
             itr2 = players.iterator();
             while (itr2.hasNext()) {
                 long player = (long) itr2.next();
