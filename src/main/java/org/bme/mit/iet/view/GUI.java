@@ -15,6 +15,7 @@ public class GUI extends JFrame {
     private final GameView gameView;
     private static final String SABOTEUR_POINTS = "Saboteur points: ";
     private static final String PLUMBER_POINTS = "Plumber points: ";
+    private static final String GAME_OVER = "Game Over";
 
     /**
      * Konstruktor, beallitja a JFrame tulajdonsagait. Amikor kivaltodik a gameOver esemeny, megjelenit egy JOptionPane-t, amely felajanlja, hogy
@@ -40,11 +41,11 @@ public class GUI extends JFrame {
                 int n;
 
                 if (Game.getInstance().getPlumberPoints() < Game.getInstance().getSaboteursPoints()) {
-                    n = JOptionPane.showOptionDialog(frame, PLUMBER_POINTS + Game.getInstance().getPlumberPoints() + "\n" + SABOTEUR_POINTS + Game.getInstance().getSaboteursPoints() + "\nSaboteurs win!", "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+                    n = JOptionPane.showOptionDialog(frame, PLUMBER_POINTS + Game.getInstance().getPlumberPoints() + "\n" + SABOTEUR_POINTS + Game.getInstance().getSaboteursPoints() + "\nSaboteurs win!", GAME_OVER, JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
                 } else if (Game.getInstance().getPlumberPoints() > Game.getInstance().getSaboteursPoints()) {
-                    n = JOptionPane.showOptionDialog(frame, PLUMBER_POINTS + Game.getInstance().getPlumberPoints() + "\n" + SABOTEUR_POINTS + Game.getInstance().getSaboteursPoints() + "\nPlumbers win!", "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+                    n = JOptionPane.showOptionDialog(frame, PLUMBER_POINTS + Game.getInstance().getPlumberPoints() + "\n" + SABOTEUR_POINTS + Game.getInstance().getSaboteursPoints() + "\nPlumbers win!", GAME_OVER, JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
                 } else
-                    n = JOptionPane.showOptionDialog(frame, PLUMBER_POINTS + Game.getInstance().getPlumberPoints() + "\n" + SABOTEUR_POINTS + Game.getInstance().getSaboteursPoints() + "\nDraw!", "Game Over", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
+                    n = JOptionPane.showOptionDialog(frame, PLUMBER_POINTS + Game.getInstance().getPlumberPoints() + "\n" + SABOTEUR_POINTS + Game.getInstance().getSaboteursPoints() + "\nDraw!", GAME_OVER, JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[1]);
 
                 if (n == JOptionPane.YES_OPTION) {   //ha azt valasztja, hogy uj jatek kezdese
                     newGame();
