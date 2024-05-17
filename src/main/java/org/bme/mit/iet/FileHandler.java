@@ -18,6 +18,7 @@ import java.util.Iterator;
 
 public class FileHandler {
     private static final String PIPES = "pipes";
+    private static final String PUMPS = "pumps";
 
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
@@ -279,7 +280,7 @@ public class FileHandler {
 
             //Create fields
             ArrayList<Field> pipes = createPipes(jo, PIPES);
-            ArrayList<Field> pumps = createPumps(jo, "pumps");
+            ArrayList<Field> pumps = createPumps(jo, PUMPS);
             ArrayList<Field> srcs = createSources(jo, "srcs");
             ArrayList<Field> dests = createDestinations(jo, "dests");
 
@@ -298,7 +299,7 @@ public class FileHandler {
 
             //Set missing attributes
             setPipeAttributes(jo, PIPES, pipes, fields, players);
-            setPumpAttributes(jo, "pumps", pumps, fields, players);
+            setPumpAttributes(jo, PUMPS, pumps, fields, players);
             setSourceAttributes(jo, "srcs", srcs, fields, players);
             setDestinationAttributes(jo, "dests", dests, fields, players);
 
@@ -351,7 +352,7 @@ public class FileHandler {
             JSONObject object = (JSONObject) itr1.next();
 
             ArrayList<Field> neighbours_b = new ArrayList<>();
-            JSONArray neighbours = (JSONArray) object.get("pumps");
+            JSONArray neighbours = (JSONArray) object.get(PUMPS);
             Iterator itr2 = neighbours.iterator();
             while (itr2.hasNext()) {
                 long neighbour = (long) itr2.next();
