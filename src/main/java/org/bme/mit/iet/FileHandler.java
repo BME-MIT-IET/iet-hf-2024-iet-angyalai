@@ -20,6 +20,7 @@ public class FileHandler {
     private static final String PIPES = "pipes";
     private static final String PUMPS = "pumps";
     private static final String CURRENT_WATER_LEVEL = "currentWaterLevel";
+    private static final String CAPACITY = "capacity";
 
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
@@ -329,7 +330,7 @@ public class FileHandler {
             Field object_b = new Pipe();
             //Field
             object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
-            object_b.setCapacity((int) (long) object.get("capacity"));
+            object_b.setCapacity((int) (long) object.get(CAPACITY));
             object_b.setWorking((boolean) object.get("isWorking"));
             object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
             object_b.setId((int) (long) object.get("id"));
@@ -384,7 +385,7 @@ public class FileHandler {
             Field object_b = new Pump();
             //Field
             object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
-            object_b.setCapacity((int) (long) object.get("capacity"));
+            object_b.setCapacity((int) (long) object.get(CAPACITY));
             object_b.setWorking((boolean) object.get("isWorking"));
             object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
             object_b.setId((int) (long) object.get("id"));
@@ -436,7 +437,7 @@ public class FileHandler {
             Field object_b = new Source();
             //Field
             object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
-            object_b.setCapacity((int) (long) object.get("capacity"));
+            object_b.setCapacity((int) (long) object.get(CAPACITY));
             object_b.setWorking((boolean) object.get("isWorking"));
             object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
             object_b.setId((int) (long) object.get("id"));
@@ -460,7 +461,7 @@ public class FileHandler {
             Field object_b = new Destination();
             //Field
             object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
-            object_b.setCapacity((int) (long) object.get("capacity"));
+            object_b.setCapacity((int) (long) object.get(CAPACITY));
             object_b.setWorking((boolean) object.get("isWorking"));
             object_b.setAlreadyMovedWater((boolean) object.get("alreadyMovedWater"));
             object_b.setId((int) (long) object.get("id"));
