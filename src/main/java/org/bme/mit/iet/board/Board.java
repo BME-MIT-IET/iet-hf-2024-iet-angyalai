@@ -70,7 +70,7 @@ public class Board {
     }
 
     public boolean isBoardSet() {
-        return (plums != null && sabs != null && plums != null && pipes != null && srcs != null && dests != null);
+        return (plums != null && sabs != null && pipes != null && srcs != null && dests != null);
     }
 
     /**
