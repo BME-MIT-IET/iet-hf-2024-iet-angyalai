@@ -6,6 +6,7 @@ import org.bme.mit.iet.field.*;
 import org.bme.mit.iet.player.Player;
 import org.bme.mit.iet.player.Plumber;
 import org.bme.mit.iet.player.Saboteur;
+import org.bme.mit.iet.view.GUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 public class FileHandler {
     private static final String PIPES = "pipes";
@@ -27,6 +29,7 @@ public class FileHandler {
     private static final String PLAYERS = "players";
     private static final String INLET = "inlet";
     private static final String OUTLET = "outlet";
+    private static final Logger LOGGER = Logger.getLogger(FileHandler.class.getName());
 
     public void save(String filename, Game game) {
         JSONObject f = new JSONObject();
@@ -35,7 +38,7 @@ public class FileHandler {
         try(FileWriter file = new FileWriter(filename)) {
             file.write(f.toJSONString());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.info(e.getMessage());
         }
     }
 
