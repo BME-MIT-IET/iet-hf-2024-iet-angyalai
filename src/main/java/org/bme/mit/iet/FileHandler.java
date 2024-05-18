@@ -1,6 +1,7 @@
 package org.bme.mit.iet;
 
 import org.bme.mit.iet.board.Board;
+import org.bme.mit.iet.exceptions.LoadException;
 import org.bme.mit.iet.field.*;
 import org.bme.mit.iet.player.Player;
 import org.bme.mit.iet.player.Plumber;
@@ -277,7 +278,7 @@ public class FileHandler {
         System.out.println("JSON file created: " + f);
     }*/
 
-    public Game load(String filename) throws RuntimeException {
+    public Game load(String filename) throws LoadException {
         try {
             Object obj = new JSONParser().parse(new FileReader(filename));
 
@@ -320,9 +321,9 @@ public class FileHandler {
             return g;
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new LoadException("Fájl olvasási hiba: " + e.getMessage());
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new LoadException("JSON feldolgozási hiba: " + e.getMessage());
         }
     }
 

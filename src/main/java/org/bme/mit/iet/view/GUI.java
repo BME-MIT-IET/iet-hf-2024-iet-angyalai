@@ -2,11 +2,13 @@ package org.bme.mit.iet.view;
 
 import org.bme.mit.iet.FileHandler;
 import org.bme.mit.iet.Game;
+import org.bme.mit.iet.exceptions.LoadException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Logger;
 
 /**
  * Létrehozza a felhasználói ablakot, létrehozza a menü sávot, új játékot generál.
@@ -16,6 +18,7 @@ public class GUI extends JFrame {
     private static final String SABOTEUR_POINTS = "Saboteur points: ";
     private static final String PLUMBER_POINTS = "Plumber points: ";
     private static final String GAME_OVER = "Game Over";
+    private static final Logger LOGGER = Logger.getLogger(GUI.class.getName());
 
     /**
      * Konstruktor, beallitja a JFrame tulajdonsagait. Amikor kivaltodik a gameOver esemeny, megjelenit egy JOptionPane-t, amely felajanlja, hogy
@@ -90,7 +93,11 @@ public class GUI extends JFrame {
      * fájlból betölti a játékállást.
      */
     public void loadGame() {
-        new FileHandler().load("save.json");
+        try {
+            new FileHandler().load("save.json");
+        } catch (LoadException e) {
+            LOGGER.info(e.getMessage());
+        }
         gameView.setGame();
     }
 }
