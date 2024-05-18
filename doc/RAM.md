@@ -1,5 +1,5 @@
 ## Hardver erőforrások mérése
-A hardver erőforrások kihasználtságának, teljesítméynenek mérésére a JMeter-t használtuk:
+A hardver erőforrások kihasználtságának, teljesítméynenek mérésére a JProfiler-t használtuk:
 
 ![](JMeter.png)
 
