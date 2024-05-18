@@ -332,7 +332,7 @@ public class FileHandler {
 
     private ArrayList<Field> createPipes(JSONObject jo, String key) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         ArrayList<Field> objects_b = new ArrayList<>();
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
@@ -357,14 +357,14 @@ public class FileHandler {
 
     private void setPipeAttributes(JSONObject jo, String key, ArrayList<Field> pipes_l, ArrayList<Field> fields_l, ArrayList<Player> players_l) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         int i = 0;
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
 
             ArrayList<Field> neighbours_b = new ArrayList<>();
             JSONArray neighbours = (JSONArray) object.get(PUMPS);
-            Iterator itr2 = neighbours.iterator();
+            Iterator<?> itr2 = neighbours.iterator();
             while (itr2.hasNext()) {
                 long neighbour = (long) itr2.next();
                 neighbours_b.add(searchField(fields_l, (int) neighbour));
@@ -387,7 +387,7 @@ public class FileHandler {
 
     private ArrayList<Field> createPumps(JSONObject jo, String key) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         ArrayList<Field> objects_b = new ArrayList<>();
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
@@ -407,14 +407,14 @@ public class FileHandler {
 
     private void setPumpAttributes(JSONObject jo, String key, ArrayList<Field> pumps_l, ArrayList<Field> fields_l, ArrayList<Player> players_l) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         int i = 0;
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
 
             ArrayList<Field> neighbours_b = new ArrayList<>();
             JSONArray neighbours = (JSONArray) object.get(PIPES);
-            Iterator itr2 = neighbours.iterator();
+            Iterator<?> itr2 = neighbours.iterator();
             while (itr2.hasNext()) {
                 long neighbour = (long) itr2.next();
                 neighbours_b.add(searchField(fields_l, (int) neighbour));
@@ -439,7 +439,7 @@ public class FileHandler {
 
     private ArrayList<Field> createSources(JSONObject jo, String key) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         ArrayList<Field> objects_b = new ArrayList<>();
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
@@ -463,7 +463,7 @@ public class FileHandler {
 
     private ArrayList<Field> createDestinations(JSONObject jo, String key) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         ArrayList<Field> objects_b = new ArrayList<>();
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
@@ -483,14 +483,14 @@ public class FileHandler {
 
     private void setDestinationAttributes(JSONObject jo, String key, ArrayList<Field> pumps_l, ArrayList<Field> fields_l, ArrayList<Player> players_l) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         int i = 0;
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
 
             ArrayList<Field> neighbours_b = new ArrayList<>();
             JSONArray neighbours = (JSONArray) object.get(PIPES);
-            Iterator itr2 = neighbours.iterator();
+            Iterator<?> itr2 = neighbours.iterator();
             while (itr2.hasNext()) {
                 long neighbour = (long) itr2.next();
                 neighbours_b.add(searchField(fields_l, (int) neighbour));
@@ -519,7 +519,7 @@ public class FileHandler {
 
     private ArrayList<Player> createSaboteurs(JSONObject jo, String key, ArrayList<Field> fields) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         ArrayList<Player> objects_b = new ArrayList<>();
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
@@ -529,7 +529,7 @@ public class FileHandler {
 
             int i = 0;
             JSONArray pipes = (JSONArray) object.get(PIPES);
-            Iterator itr2 = pipes.iterator();
+            Iterator<?> itr2 = pipes.iterator();
             while (itr2.hasNext()) {
                 long pipe = (long) itr2.next();
                 try {
@@ -552,7 +552,7 @@ public class FileHandler {
 
     private ArrayList<Player> createPlumbers(JSONObject jo, String key, ArrayList<Field> fields) {
         JSONArray objects = (JSONArray) jo.get(key);
-        Iterator itr1 = objects.iterator();
+        Iterator<?> itr1 = objects.iterator();
         ArrayList<Player> objects_b = new ArrayList<>();
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
@@ -562,7 +562,7 @@ public class FileHandler {
 
             int i = 0;
             JSONArray pipes = (JSONArray) object.get(PIPES);
-            Iterator itr2 = pipes.iterator();
+            Iterator<?> itr2 = pipes.iterator();
             while (itr2.hasNext()) {
                 long pipe = (long) itr2.next();
                 try {
