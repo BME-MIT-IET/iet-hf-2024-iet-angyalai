@@ -3,7 +3,7 @@ A hardver erőforrások kihasználtságának, teljesítméynenek mérésére a J
 
 ![](JMeter.png)
 
-### 1. RAM használat
+### 1. RAM használat (Czifra Barnabás)
 
 ![](GC_collector.png)
 
@@ -39,7 +39,7 @@ A fentiek figyelembevételével érdemes tovább optimalizálni a memóriahaszn�
 
 
 
-### 2. Szálkezelés
+### 2. Szálkezelés (Czifra Barnabás)
 ![](Thread.png)
 
 #### Az ábrán az alábbi szálállapotok különíthetők el színekkel:
@@ -73,3 +73,62 @@ A fentiek figyelembevételével érdemes tovább optimalizálni a memóriahaszn�
 #### Összegzés
 
 Összefoglalva, az ábra a játék szálkezelésének egy dinamikus és komplex képét mutatja. Az inicializációs fázis után a játék szálai különböző állapotokba kerülnek, attól függően, hogy milyen feladatokat kell végrehajtaniuk. A futó szálak számának és állapotának változása azt jelzi, hogy a játék folyamatosan változó terhelést jelent a rendszerre, ami fontos tényező lehet a teljesítmény optimalizálása során. Ezen információk alapján érdemes tovább vizsgálni, hogyan lehetne a szálkezelést hatékonyabbá tenni, hogy minimalizáljuk a várakozási időket és maximalizáljuk a futó szálak kihasználtságát.
+
+### 3. CPU Használat (Molnár Márton)
+A CPU használat mérése a program egy Intel Core i7-10610U típusú CPU-n történő futtatása során történt.
+
+![](CPU.png)
+
+A fenti ábrán egy gyors 5 menetes játék során rögzített CPU használat gradfikon látható.
+A játék a következő paraméterekkel történt:
+- 2 Szabotőr
+- 2 Szerelő
+- 3 Forrás
+- 5 Pumpa
+- 3 Ciszterna
+
+A játékmenet során nem helyeztem el új elemeket a pályán.
+A grafikonon kék színnel rajzolódik ki a CPU teljes terhelése.
+Zöld színnel pedig a játék CPU használata.
+A grafikonon 20 és 40 másodperc között láható, hogy a játék nem használta a CPU-t.
+Ez azért történt, mivel abban az idősávban nem nyúltam a játéhoz.
+
+Ezután a játékot megismételtem a következő paraméterekkel:
+- 5 Szabotőr
+- 5 Szerelő
+- 6 Forrás
+- 10 Pumpa
+- 6 Ciszterna
+
+![](CPU_2.png)
+
+A fenti ábrán látható, hogy ekkor megnövekedett a játék CPU használata.
+A lépések már érezhetően lassabban történtek meg, de a játék még teljesen játszható volt.
+
+Ezután a játékot megismételtem a következő paraméterekkel:
+- 10 Szabotőr
+- 10 Szerelő
+- 11 Forrás
+- 20 Pumpa
+- 11 Ciszterna
+
+![](CPU_3.png)
+
+Ahogy a fenti ábrán látható, a CPU terhelés ismét megnövekedett.
+A játék lépései már igen lassan történtek meg, de a játék még így is játszható maradt.
+
+Ezután a játékot lefuttattam még egyszer, 100-100 játékossal.
+
+![](CPU_4.png)
+
+Ebben az esetben a CPU használat nem nőtt meg extrém módon, azonban a játék szinte játszhatatlanná vált,
+nem csupán azért, mivel a játékelemek mennyisége kezelhetetlen mértékű lett, hanem mivel a játék lépései igencsak lassúvá váltak.
+
+
+#### Következtetések
+- A játék minden egyes körben kirajzolja a játéktér összes elemét újra, amely rengetek értékes CPU időt használ fel.
+- A játék egy szálon fut, ezért a játéktér elemeit csak egymás után tudja kirajzolni, korlátozva ezzel a kirajzolás sebességét.
+
+#### Javaslatok
+- A játék minden körben csak a változáson átesett elemeket rajzolja ki, csökkentve ezzel a terhelést a CPU-n.
+- A játék többszálúsítása bár nem lenne egyszerű feladat, de nagyban növelné a játék sebességét.
