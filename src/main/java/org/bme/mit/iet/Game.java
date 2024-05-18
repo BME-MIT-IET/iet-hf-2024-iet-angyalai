@@ -87,10 +87,10 @@ public class Game {
         Player.setIdCount(0);
         board = null;
         var numberOfPlayers = numberOfPlums + numberOfSabs;
-        var numberOfDest = Math.round(numberOfPlayers / 2) + 1;
-        var numberOfSrc = Math.round(numberOfPlayers / 2) + 1;
+        var numberOfDest = Math.round(numberOfPlayers / 2f) + 1;
+        var numberOfSrc = Math.round(numberOfPlayers / 2f) + 1;
         var minNumberOfPumps = Math.toIntExact(Math.round(numberOfDest * 1.5));
-        var maximumNumberOfPumps = Math.round(numberOfDest * 2);
+        var maximumNumberOfPumps = Math.round(numberOfDest * 2f);
         var numOfPumps = random.nextInt(maximumNumberOfPumps - minNumberOfPumps + 1) + minNumberOfPumps;
         var numOfPipes = Math.toIntExact(Math.round(numOfPumps * 1.5));
 
