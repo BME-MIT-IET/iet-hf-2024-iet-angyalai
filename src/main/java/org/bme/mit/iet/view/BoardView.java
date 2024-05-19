@@ -34,6 +34,8 @@ public class BoardView extends JPanel {
      * PlayerView-kat tartalmazo lista
      */
     private final ArrayList<PlayerView> playerViews;
+    
+    private Random random = new Random();
 
     /**
      * Konstruktor, beallitja a panel szeleit, feltolti a fieldViews, pipeViews, playerViews listakat. A button-oket
@@ -54,7 +56,7 @@ public class BoardView extends JPanel {
 
         var board = Game.getInstance().getBoard();
         setLayout(null);
-        var random = new Random();
+
 
         int x = 60 + random.nextInt(10), y = 30;
         int temp = 1;
