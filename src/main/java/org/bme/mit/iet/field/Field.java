@@ -4,12 +4,13 @@ import org.bme.mit.iet.player.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Mezo os osztaly. Nyilvan tartja a szomszedjait es hogy eppen mely jatekosok allnak rajta.
  */
-public abstract class Field {
+public abstract class Field implements Serializable {
     /**
      * Az azonosito novelesehez szukseges statikus valtozo
      */
