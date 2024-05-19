@@ -59,6 +59,11 @@ public class Game implements Serializable {
      * A soron levo jatekos lepett-e mar
      */
     private boolean isCurrentPlayerMadeMove;
+
+    public int getAlreadyPlayed() {
+        return alreadyPlayed;
+    }
+
     /**
      * Az adott korben hany jatekos kerult mar sorra
      */
