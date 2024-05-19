@@ -95,8 +95,14 @@ public class inventory {
     void pick_up_pipe_from_dest() {
         //Mozog a ciszternára
         board.getPlayers().get(4).moveTo(board.getDests().get(0));
+
+        Field pipe = new Pipe();
+
         //Felvesz egy csövet a ciszternából
-        board.getPlayers().get(4).getCurrentField().pickUpNeighbourField(new Pipe(), board.getPlayers().get(4));
+        board.getPlayers().get(4).getCurrentField().pickUpNeighbourField(pipe, board.getPlayers().get(4));
+        Field[] pipes = board.getPlayers().get(4).getPipes();
+        assertEquals(1, pipes.length);
+        assertEquals(pipe, pipes[0]);
     }
 
     @Test
@@ -148,8 +154,15 @@ public class inventory {
     void pick_up_pump() {
         //Mozog a ciszternára
         board.getPlayers().get(4).moveTo(board.getDests().get(0));
+
+        Field pump = new Pump();
+
         //Felvesz egy csövet a ciszternából
-        board.getPlayers().get(4).getCurrentField().pickUpNeighbourField(new Pipe(), board.getPlayers().get(4));
+        board.getPlayers().get(4).getCurrentField().pickUpNeighbourField(pump, board.getPlayers().get(4));
+
+        Field pickedPump = board.getPlayers().get(4).getPump();
+        assertEquals(pump, pickedPump);
+
     }
 
     @Test
