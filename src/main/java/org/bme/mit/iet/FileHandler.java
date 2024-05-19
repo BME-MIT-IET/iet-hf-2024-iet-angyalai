@@ -6,7 +6,6 @@ import org.bme.mit.iet.field.*;
 import org.bme.mit.iet.player.Player;
 import org.bme.mit.iet.player.Plumber;
 import org.bme.mit.iet.player.Saboteur;
-import org.bme.mit.iet.view.GUI;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,6 +28,7 @@ public class FileHandler {
     private static final String PLAYERS = "players";
     private static final String INLET = "inlet";
     private static final String OUTLET = "outlet";
+    private static final String DESTINATIONS = "dests";
     private static final Logger LOGGER = Logger.getLogger(FileHandler.class.getName());
 
     public void save(String filename, Game game) {
@@ -51,10 +51,10 @@ public class FileHandler {
             jo = (JSONObject) game.get("Board");
 
             //Create fields
-            ArrayList<Field> pipes = createPipes(jo, PIPES);
-            ArrayList<Field> pumps = createPumps(jo, PUMPS);
-            ArrayList<Field> srcs = createSources(jo, "srcs");
-            ArrayList<Field> dests = createDestinations(jo, "dests");
+            ArrayList<Field> pipes = createFields(jo, PIPES);
+            ArrayList<Field> pumps = createFields(jo, PUMPS);
+            ArrayList<Field> srcs = createFields(jo, "srcs");
+            ArrayList<Field> dests = createFields(jo, DESTINATIONS);
 
             ArrayList<Field> fields = new ArrayList<>();
             fields.addAll(pipes);
@@ -63,17 +63,17 @@ public class FileHandler {
             fields.addAll(dests);
 
             //Create players
-            ArrayList<Player> plums = createPlumbers(jo, "plums", fields);
-            ArrayList<Player> sabs = createSaboteurs(jo, "sabs", fields);
+            ArrayList<Player> plums = createPlayers(jo, "plums", fields);
+            ArrayList<Player> sabs = createPlayers(jo, "sabs", fields);
             ArrayList<Player> players = new ArrayList<>();
             players.addAll(plums);
             players.addAll(sabs);
 
             //Set missing attributes
-            setPipeAttributes(jo, PIPES, pipes, fields, players);
-            setPumpAttributes(jo, PUMPS, pumps, fields, players);
-            setSourceAttributes(jo, "srcs", srcs, fields, players);
-            setDestinationAttributes(jo, "dests", dests, fields, players);
+            setFieldAttributes(jo, PIPES, pipes, fields, players);
+            setFieldAttributes(jo, PUMPS, pumps, fields, players);
+            setFieldAttributes(jo, "srcs", srcs, fields, players);
+            setFieldAttributes(jo, DESTINATIONS, dests, fields, players);
 
             Board board = new Board(plums, sabs, pumps, pipes, dests, srcs);
             Game g = Game.getInstance();
@@ -91,202 +91,96 @@ public class FileHandler {
         }
     }
 
-    private ArrayList<Field> createPipes(JSONObject jo, String key) {
+    private ArrayList<Field> createFields(JSONObject jo, String key) {
         JSONArray objects = (JSONArray) jo.get(key);
         Iterator<?> itr1 = objects.iterator();
-        ArrayList<Field> objects_b = new ArrayList<>();
+        ArrayList<Field> objectsB = new ArrayList<>();
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
-            Field object_b = new Pipe();
-            //Field
-            object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
-            object_b.setCapacity((int) (long) object.get(CAPACITY));
-            object_b.setWorking((boolean) object.get(IS_WORKING));
-            object_b.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
-            object_b.setId((int) (long) object.get("id"));
-            //Pipe specific
-            object_b.setPiercedCounter((int) (long) object.get("piercedCounter"));
-            object_b.setSlippery((boolean) object.get("isSlippery"));
-            object_b.setSlipperyCounter((int) (long) object.get("slipperyCounter"));
-            object_b.setSticky((boolean) object.get("isSticky"));
-            object_b.setStickyCounter((int) (long) object.get("stickyCounter"));
+            Field objectB;
+            if (key.equals(PIPES)) {
+                objectB = new Pipe();
+                objectB.setPiercedCounter((int) (long) object.get("piercedCounter"));
+                objectB.setSlippery((boolean) object.get("isSlippery"));
+                objectB.setSlipperyCounter((int) (long) object.get("slipperyCounter"));
+                objectB.setSticky((boolean) object.get("isSticky"));
+                objectB.setStickyCounter((int) (long) object.get("stickyCounter"));
+            }
+            else if (key.equals(PUMPS))
+                objectB = new Pump();
+            else if (key.equals("srcs"))
+                objectB = new Source();
+            else
+                objectB = new Destination();        
 
-            objects_b.add(object_b);
+            objectB.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
+            objectB.setCapacity((int) (long) object.get(CAPACITY));
+            objectB.setWorking((boolean) object.get(IS_WORKING));
+            objectB.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
+            objectB.setId((int) (long) object.get("id"));
+
+            objectsB.add(objectB);
         }
-        return objects_b;
+        return objectsB;
     }
 
-    private void setPipeAttributes(JSONObject jo, String key, ArrayList<Field> pipes_l, ArrayList<Field> fields_l, ArrayList<Player> players_l) {
+    private void setFieldAttributes(JSONObject jo, String key, ArrayList<Field> elementsL, ArrayList<Field> fieldsL, ArrayList<Player> playersL) {
         JSONArray objects = (JSONArray) jo.get(key);
         Iterator<?> itr1 = objects.iterator();
         int i = 0;
+        String constant = PIPES;
+        if (key.equals(PIPES))
+            constant = PUMPS;
+
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
 
-            ArrayList<Field> neighbours_b = new ArrayList<>();
-            JSONArray neighbours = (JSONArray) object.get(PUMPS);
+            ArrayList<Field> neighboursB = new ArrayList<>();
+            JSONArray neighbours = (JSONArray) object.get(constant);
             Iterator<?> itr2 = neighbours.iterator();
             while (itr2.hasNext()) {
                 long neighbour = (long) itr2.next();
-                neighbours_b.add(searchField(fields_l, (int) neighbour));
+                neighboursB.add(searchField(fieldsL, (int) neighbour));
             }
-            pipes_l.get(i).setNeighbours(neighbours_b);
+            elementsL.get(i).setNeighbours(neighboursB);
 
-            ArrayList<Player> players_b = new ArrayList<>();
+            if (key.equals(PUMPS) || key.equals("srcs") || key.equals(DESTINATIONS)) {
+                elementsL.get(i).setInOutlet(object.get(INLET) != null ? searchField(fieldsL, (int) (long) object.get(INLET)) : null,
+                    object.get(OUTLET) != null ? searchField(fieldsL, (int) (long) object.get(OUTLET)) : null);
+            }
+
+            ArrayList<Player> playersB = new ArrayList<>();
             JSONArray players = (JSONArray) object.get(PLAYERS);
             itr2 = players.iterator();
             while (itr2.hasNext()) {
                 long player = (long) itr2.next();
-                players_b.add(searchPlayer(players_l, (int) player));
+                playersB.add(searchPlayer(playersL, (int) player));
             }
-            pipes_l.get(i).setPlayers(players_b);
+            elementsL.get(i).setPlayers(playersB);
+
+            if (key.equals(DESTINATIONS)) {
+                elementsL.get(i).setPump(searchField(elementsL, (int) (long) object.get("pump")));
+                elementsL.get(i).setPipe(searchField(elementsL, (int) (long) object.get("pipe")));
+            }
 
             i++;
         }
     }
 
-
-    private ArrayList<Field> createPumps(JSONObject jo, String key) {
+    private ArrayList<Player> createPlayers(JSONObject jo, String key, ArrayList<Field> fields) {
         JSONArray objects = (JSONArray) jo.get(key);
         Iterator<?> itr1 = objects.iterator();
-        ArrayList<Field> objects_b = new ArrayList<>();
+        ArrayList<Player> objectsB = new ArrayList<>();
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
-            Field object_b = new Pump();
-            //Field
-            object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
-            object_b.setCapacity((int) (long) object.get(CAPACITY));
-            object_b.setWorking((boolean) object.get(IS_WORKING));
-            object_b.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
-            object_b.setId((int) (long) object.get("id"));
-            //Pump specific
+            Player objectB;
 
-            objects_b.add(object_b);
-        }
-        return objects_b;
-    }
+            if (key.equals("plums")) 
+                objectB = new Plumber(searchField(fields, (int) (long) object.get("id")));
+            else  
+                objectB = new Saboteur(searchField(fields, (int) (long) object.get("id")));
 
-    private void setPumpAttributes(JSONObject jo, String key, ArrayList<Field> pumps_l, ArrayList<Field> fields_l, ArrayList<Player> players_l) {
-        JSONArray objects = (JSONArray) jo.get(key);
-        Iterator<?> itr1 = objects.iterator();
-        int i = 0;
-        while (itr1.hasNext()) {
-            JSONObject object = (JSONObject) itr1.next();
-
-            ArrayList<Field> neighbours_b = new ArrayList<>();
-            JSONArray neighbours = (JSONArray) object.get(PIPES);
-            Iterator<?> itr2 = neighbours.iterator();
-            while (itr2.hasNext()) {
-                long neighbour = (long) itr2.next();
-                neighbours_b.add(searchField(fields_l, (int) neighbour));
-            }
-            pumps_l.get(i).setNeighbours(neighbours_b);
-
-            pumps_l.get(i).setInOutlet(object.get(INLET) != null ? searchField(fields_l, (int) (long) object.get(INLET)) : null,
-                    object.get(OUTLET) != null ? searchField(fields_l, (int) (long) object.get(OUTLET)) : null);
-
-            ArrayList<Player> players_b = new ArrayList<Player>();
-            JSONArray players = (JSONArray) object.get(PLAYERS);
-            itr2 = players.iterator();
-            while (itr2.hasNext()) {
-                long player = (long) itr2.next();
-                players_b.add(searchPlayer(players_l, (int) player));
-            }
-            pumps_l.get(i).setPlayers(players_b);
-
-            i++;
-        }
-    }
-
-    private ArrayList<Field> createSources(JSONObject jo, String key) {
-        JSONArray objects = (JSONArray) jo.get(key);
-        Iterator<?> itr1 = objects.iterator();
-        ArrayList<Field> objects_b = new ArrayList<>();
-        while (itr1.hasNext()) {
-            JSONObject object = (JSONObject) itr1.next();
-            Field object_b = new Source();
-            //Field
-            object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
-            object_b.setCapacity((int) (long) object.get(CAPACITY));
-            object_b.setWorking((boolean) object.get(IS_WORKING));
-            object_b.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
-            object_b.setId((int) (long) object.get("id"));
-            //Pump specific
-
-            objects_b.add(object_b);
-        }
-        return objects_b;
-    }
-
-    private void setSourceAttributes(JSONObject jo, String key, ArrayList<Field> pumps_l, ArrayList<Field> fields_l, ArrayList<Player> players_l) {
-        setPumpAttributes(jo, key, pumps_l, fields_l, players_l);
-    }
-
-    private ArrayList<Field> createDestinations(JSONObject jo, String key) {
-        JSONArray objects = (JSONArray) jo.get(key);
-        Iterator<?> itr1 = objects.iterator();
-        ArrayList<Field> objects_b = new ArrayList<>();
-        while (itr1.hasNext()) {
-            JSONObject object = (JSONObject) itr1.next();
-            Field object_b = new Destination();
-            //Field
-            object_b.setCurrentWaterLevel((int) (long) object.get(CURRENT_WATER_LEVEL));
-            object_b.setCapacity((int) (long) object.get(CAPACITY));
-            object_b.setWorking((boolean) object.get(IS_WORKING));
-            object_b.setAlreadyMovedWater((boolean) object.get(ALREADY_MOVED_WATER));
-            object_b.setId((int) (long) object.get("id"));
-            //Pump specific
-
-            objects_b.add(object_b);
-        }
-        return objects_b;
-    }
-
-    private void setDestinationAttributes(JSONObject jo, String key, ArrayList<Field> pumps_l, ArrayList<Field> fields_l, ArrayList<Player> players_l) {
-        JSONArray objects = (JSONArray) jo.get(key);
-        Iterator<?> itr1 = objects.iterator();
-        int i = 0;
-        while (itr1.hasNext()) {
-            JSONObject object = (JSONObject) itr1.next();
-
-            ArrayList<Field> neighbours_b = new ArrayList<>();
-            JSONArray neighbours = (JSONArray) object.get(PIPES);
-            Iterator<?> itr2 = neighbours.iterator();
-            while (itr2.hasNext()) {
-                long neighbour = (long) itr2.next();
-                neighbours_b.add(searchField(fields_l, (int) neighbour));
-            }
-            pumps_l.get(i).setNeighbours(neighbours_b);
-
-            pumps_l.get(i).setInOutlet(object.get(INLET) != null ? searchField(fields_l, (int) (long) object.get(INLET)) : null,
-                    object.get(OUTLET) != null ? searchField(fields_l, (int) (long) object.get(OUTLET)) : null);
-
-            ArrayList<Player> players_b = new ArrayList<Player>();
-            JSONArray players = (JSONArray) object.get(PLAYERS);
-            itr2 = players.iterator();
-            while (itr2.hasNext()) {
-                long player = (long) itr2.next();
-                players_b.add(searchPlayer(players_l, (int) player));
-            }
-            pumps_l.get(i).setPlayers(players_b);
-
-            pumps_l.get(i).setPump(searchField(pumps_l, (int) (long) object.get("pump")));
-            pumps_l.get(i).setPipe(searchField(pumps_l, (int) (long) object.get("pipe")));
-
-            i++;
-        }
-    }
-
-
-    private ArrayList<Player> createSaboteurs(JSONObject jo, String key, ArrayList<Field> fields) {
-        JSONArray objects = (JSONArray) jo.get(key);
-        Iterator<?> itr1 = objects.iterator();
-        ArrayList<Player> objects_b = new ArrayList<>();
-        while (itr1.hasNext()) {
-            JSONObject object = (JSONObject) itr1.next();
-            Player object_b;
-            object_b = new Saboteur(searchField(fields, (int) (long) object.get("id")));
-            object_b.setId((int) (long) object.get("id"));
+            objectB.setId((int) (long) object.get("id"));
 
             int i = 0;
             JSONArray pipes = (JSONArray) object.get(PIPES);
@@ -294,53 +188,21 @@ public class FileHandler {
             while (itr2.hasNext()) {
                 long pipe = (long) itr2.next();
                 try {
-                    object_b.setPipeInventory(i++, searchField(fields, (int) pipe));
+                    objectB.setPipeInventory(i++, searchField(fields, (int) pipe));
                 } catch (Exception e) {
                     //Nem baj ha nincsen cső az invenoryban
                 }
             }
 
             try {
-                object_b.addPump(searchField(fields, (int) (long) object.get("pump")));
+                objectB.addPump(searchField(fields, (int) (long) object.get("pump")));
             } catch (Exception e) {
                 //Nem baj ha nincsen pumpa az inventoryban
             }
 
-            objects_b.add(object_b);
+            objectsB.add(objectB);
         }
-        return objects_b;
-    }
-
-    private ArrayList<Player> createPlumbers(JSONObject jo, String key, ArrayList<Field> fields) {
-        JSONArray objects = (JSONArray) jo.get(key);
-        Iterator<?> itr1 = objects.iterator();
-        ArrayList<Player> objects_b = new ArrayList<>();
-        while (itr1.hasNext()) {
-            JSONObject object = (JSONObject) itr1.next();
-            Player object_b;
-            object_b = new Plumber(searchField(fields, (int) (long) object.get("id")));
-            object_b.setId((int) (long) object.get("id"));
-
-            int i = 0;
-            JSONArray pipes = (JSONArray) object.get(PIPES);
-            Iterator<?> itr2 = pipes.iterator();
-            while (itr2.hasNext()) {
-                long pipe = (long) itr2.next();
-                try {
-                    object_b.setPipeInventory(i++, searchField(fields, (int) pipe));
-                } catch (Exception e) {
-                    //Nem baj ha nincsen cső az invenoryban
-                }
-            }
-
-            try {
-                object_b.addPump(searchField(fields, (int) (long) object.get("pump")));
-            } catch (Exception e) {
-                //Nem baj ha nincsen pumpa az inventoryban
-            }
-            objects_b.add(object_b);
-        }
-        return objects_b;
+        return objectsB;
     }
 
     private Field searchField(ArrayList<Field> list, int id) {
