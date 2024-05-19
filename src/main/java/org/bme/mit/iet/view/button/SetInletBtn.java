@@ -21,10 +21,6 @@ public class SetInletBtn extends ActionButton {
         super(gameView, "setinlet");
         var game = Game.getInstance();
 
-        if (game.getBoard().getPlums().contains(field)) {
-            //clicked field is a pump
-            setVisible(false);
-        }
         if (game.getBoard().getSrcs().contains(game.getCurrentPlayer().getCurrentField())) {
             //current field is a source
             setVisible(false);

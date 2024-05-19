@@ -20,11 +20,7 @@ public class SetOutletBtn extends ActionButton {
     public SetOutletBtn(GameView gameView, Field field) {
         super(gameView, "setoutlet");
         var game = Game.getInstance();
-
-        if (game.getBoard().getPlums().contains(field)) {
-            //clicked field is a pump
-            setVisible(false);
-        }
+        
         if (game.getBoard().getDests().contains(game.getCurrentPlayer().getCurrentField())) {
             //current field is a destination
             setVisible(false);
