@@ -256,11 +256,11 @@ public abstract class Field implements Serializable {
      */
     public JSONObject toJSON() {
         JSONObject jo = new JSONObject();
-        JSONArray players = new JSONArray();
-        for (Player player : this.players) {
-            players.add(player.getId());
+        JSONArray jsonPlayers = new JSONArray();
+        for (Player player : players) {
+            jsonPlayers.add(player.getId());
         }
-        jo.put("players", players);
+        jo.put("players", jsonPlayers);
         jo.put("currentWaterLevel", currentWaterLevel);
         jo.put("capacity", capacity);
         jo.put("isWorking", isWorking);

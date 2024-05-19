@@ -35,14 +35,7 @@ public class Pump extends Field {
         this.capacity = 3;
         this.id = idCount++;
     }
-
-    /**
-     * Getter az azonositohoz
-     */
-    public int getId() {
-        return this.id;
-    }
-
+    
     /**
      * Visszaadja, hogy a paraméterül kapott játékos ráléphet-e az adott pumpára:
      * Mivel a pumpan barhanyan allhatnak, igy mindig ralephet a jatekos

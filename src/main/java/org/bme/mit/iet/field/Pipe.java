@@ -50,13 +50,6 @@ public class Pipe extends Field {
         this.id = idCount++;
     }
 
-    /**
-     * Getter az azonositohoz
-     */
-    public int getId() {
-        return this.id;
-    }
-
     public int getStickyCounter() {
         return stickyCounter;
     }

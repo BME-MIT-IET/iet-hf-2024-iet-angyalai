@@ -106,15 +106,6 @@ public class Destination extends Pump {
         return res;
     }
 
-    /**
-     * Getter az azonositohoz
-     *
-     * @return azonosito
-     */
-    public int getId() {
-        return this.id;
-    }
-
     @Override
     public JSONObject toJSON() {
         JSONObject jo = super.toJSON();
