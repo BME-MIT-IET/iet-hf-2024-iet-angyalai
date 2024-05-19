@@ -1,6 +1,7 @@
 package org.bme.mit.iet.view;
 
 import org.bme.mit.iet.Game;
+import org.bme.mit.iet.board.Board;
 import org.bme.mit.iet.field.Field;
 import org.bme.mit.iet.player.Player;
 import org.bme.mit.iet.view.fieldview.*;
@@ -34,77 +35,92 @@ public class BoardView extends JPanel {
      * PlayerView-kat tartalmazo lista
      */
     private final ArrayList<PlayerView> playerViews;
-    
+
     private Random random = new Random();
 
-    /**
-     * Konstruktor, beallitja a panel szeleit, feltolti a fieldViews, pipeViews, playerViews listakat. A button-oket
-     * random pozicioba helyezi el. Hozzaad egy MouseListenert a panelhez, amely ellenorzi, hogy egy csohoz tartozo
-     * vonalra kattintottunk-e.
-     *
-     * @param gameView
-     * @param btnGroup
-     */
     public BoardView(GameView gameView, ActionButtonGroup btnGroup) {
         this.fieldViews = new ArrayList<>();
         this.pipeViews = new ArrayList<>();
         this.playerViews = new ArrayList<>();
 
-        setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(4, 8, 4, 8, Color.BLACK), // Thick left border
-                BorderFactory.createEmptyBorder(0, 0, 0, 0) // Empty border for top, right, and bottom
-        ));
+        setPanelBorder();
 
         var board = Game.getInstance().getBoard();
         setLayout(null);
 
+        addFieldViews(gameView, btnGroup, board);
+        addPipeViews(gameView, btnGroup, board);
+        addPlayerViews(board);
 
+        addMouseListenerToPanel();
+    }
+
+    private void setPanelBorder() {
+        setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(4, 8, 4, 8, Color.BLACK), // Thick left border
+                BorderFactory.createEmptyBorder(0, 0, 0, 0) // Empty border for top, right, and bottom
+        ));
+    }
+
+    private void addFieldViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
+        addSourceViews(gameView, btnGroup, board);
+        addPumpViews(gameView, btnGroup, board);
+        addDestinationViews(gameView, btnGroup, board);
+    }
+
+    private void addSourceViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
         int x = 60 + random.nextInt(10), y = 30;
         int temp = 1;
         for (Field source : board.getSrcs()) {
             var sv = new SourceView(gameView, btnGroup, source);
-            sv.setBounds(x, y, sv.getPreferredSize().width, sv.getPreferredSize().height);
+            setViewBounds(sv, x, y);
             x += (gameView.getWidth() / board.getSrcs().size()) + temp * random.nextInt(15);
             y += temp * 15;
             temp = -temp;
-
             add(sv);
             fieldViews.add(sv);
         }
+    }
 
-        x = 50 + random.nextInt(10);
-        y = gameView.getHeight() / 3;
+    private void addPumpViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
+        int x = 50 + random.nextInt(10);
+        int y = gameView.getHeight() / 3;
+        int temp = 1;
         for (Field pump : board.getPumps()) {
-            String fileNameIfWorkingOrNot;
-            if (pump.isWorking()) fileNameIfWorkingOrNot = "pump";
-            else fileNameIfWorkingOrNot = "pump-not-working";
+            String fileNameIfWorkingOrNot = pump.isWorking() ? "pump" : "pump-not-working";
             var pv = new PumpView(gameView, btnGroup, pump, fileNameIfWorkingOrNot);
-            pv.setBounds(x, y, pv.getPreferredSize().width, pv.getPreferredSize().height);
+            setViewBounds(pv, x, y);
             x += (gameView.getWidth() / board.getPumps().size()) + temp * random.nextInt(15);
             y += temp * new Random().nextInt(150);
             temp = -temp;
             add(pv);
             fieldViews.add(pv);
         }
+    }
 
-
-        x = 60 + random.nextInt(10);
-        y = (2 * gameView.getHeight()) / 3;
-
+    private void addDestinationViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
+        int x = 60 + random.nextInt(10);
+        int y = (2 * gameView.getHeight()) / 3;
+        int temp = 1;
         for (Field destination : board.getDests()) {
             var dv = new DestView(gameView, btnGroup, destination);
-            dv.setBounds(x, y, dv.getPreferredSize().width, dv.getPreferredSize().height);
+            setViewBounds(dv, x, y);
             x += (gameView.getWidth() / board.getDests().size()) + temp * 5 + temp * random.nextInt(15);
             y += temp * 15;
             temp = -temp;
             add(dv);
             fieldViews.add(dv);
         }
+    }
 
+    private void addPipeViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
         for (Field pipe : board.getPipes()) {
             var pv = new PipeView(gameView, btnGroup, pipe);
             pipeViews.add(pv);
         }
+    }
 
+    private void addPlayerViews(Board board) {
         for (Player plumber : board.getPlums()) {
             playerViews.add(new PlumberView(plumber));
         }
@@ -112,7 +128,13 @@ public class BoardView extends JPanel {
         for (Player saboteur : board.getSabs()) {
             playerViews.add(new SaboteurView(saboteur));
         }
+    }
 
+    private void setViewBounds(JComponent view, int x, int y) {
+        view.setBounds(x, y, view.getPreferredSize().width, view.getPreferredSize().height);
+    }
+
+    private void addMouseListenerToPanel() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -130,6 +152,7 @@ public class BoardView extends JPanel {
             }
         });
     }
+
 
     /**
      * A csovek, jatekosok es a hatter kirajzolasaert felelos fuggveny. A jatekosok amellett a mezo mellett jelennek
