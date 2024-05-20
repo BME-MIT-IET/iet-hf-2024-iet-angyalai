@@ -1,3 +1,5 @@
+package org.bme.mit.iet;
+
 import org.bme.mit.iet.board.Board;
 import org.bme.mit.iet.field.*;
 import org.bme.mit.iet.player.*;
@@ -9,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class inventory {
+public class InventoryTest {
 
     private static Board board;
 
