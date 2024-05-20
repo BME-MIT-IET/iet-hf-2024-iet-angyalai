@@ -2,7 +2,7 @@ name: SonarCloud
 on:
   push:
     branches:
-      - fixing_sonar_issues_eszter
+      - main
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
