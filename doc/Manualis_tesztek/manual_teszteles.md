@@ -5,7 +5,7 @@ Ezen feladat célja a játék funkcióinak manuélis tesztelése, és a játékb
 Ezen feladat célja a játékossal való mozgás tesztelése.
 
 A játék elindítása után az aktív játékossal rákattintottam egy csőre, majd megynomtam a "mozgás" gombot.
-Külön figyelemmel kitértem arra, hogy a mozgatás csak azon játékelemekre múködjön, melyek a melett az elem mellett vannak,
+Külön figyelemmel kitértem arra, hogy a mozgatás csak azon játékelemekre múködjön, melyek amellett az elem mellett vannak,
 amelyen az aktív játékos éppen áll. A funkció helyesen működött, megtörtént a lépés.
 
 ![](Lepes1.png)
@@ -68,3 +68,57 @@ Eztuán egy szerelővel ráálltam az előbb kilyukasztott csőre és megnyomtam
 Eztuán a cső ismét képessé vált a víz továbbítására.
 
 ![](Lyukascso3.png)
+
+### 7. Szabotőrrel való lépés (Czifra Barnabás)
+Ezen feladat célja a szabotőr lépés sikerességének tesztelése.
+
+Amikor a szabotőr volt az aktív játékos (színnel kitöltött a figurája), rákattintottam az előtte álló csőre, majd kiválasztottam a lépés opciót. A szabotőr áthelyeződött a pumpáról a csőre, sikeresen megtörtént a lépés.
+
+![](Szab_lepes1.png)
+
+A lépés eredménye:
+
+![](Szab_lepes2.png)
+
+### 8. Szabotőr csúszóssá teszi a csövet (Czifra Barnabás)
+Ezen feladat célja a szabotőr azon tevékenysége, amikor csúszóssá teszi a csövet. Ennek elvárt eredménye, hogy aki rálépne a csőre, az ne tudjon, hanem tovább csússzon a cső végén elhelyezkedő pumpára.
+
+Amikor a szabotőr az aktív játékos, és rajta álló csövön kattittunk, kit tudjuk választani, hogy  szabotőr milyen tevékenységet végezzen. Kiválasztva a csúszóssá tevés funkciót, a cső sárgára színeződik, ezzel mutatva, hogy csúszóssá vált a cső.
+
+A csövön állva csúszóssá tevés funckió kiválasztása:
+
+![](Csuszos1.png)
+
+A lépés eredménye:
+
+![](Csuszos1.png)
+
+Most pedig nézzük meg, mi az eredménye, ha egy szerelővel megpróbálunk rálépni a csúszós csőre:
+
+![](Csuszos3.png)
+
+A lépés eredménye:
+
+![](Csuszos4.png)
+
+Láthatjuk, hogy a szerelő nem a csőre lépett, hanem a pumpára. A cső csúszóssága az elvárt eredményt hozta, valóban az történt, amit elvártunk: a szerelő tovább csúszott a pumpára.
+
+### 9. Szabotőr ragadóssá teszi a csövet (Czifra Barnabás)
+
+A feladat célja a szabotőr azon tevékenysége, amikor ragadóssá tesz egy csövet. Ennek elvárt eredménye, hogy aki arra a csőre rálép, az ne tudjon továbbhmenni (tehát maga a szabotőr sem).
+
+Amikor a szabotőr az aktív játékos, és rajta álló csövön kattittunk, kit tudjuk választani, hogy  szabotőr milyen tevékenységet végezzen. Kiválasztva a ragadóssá tevés funkciót, a cső zöldre színeződik, ezzel mutatva, hogy ragadóssá vált a cső.
+
+A csövön állva ragadóssá tevés funckió kiválasztása:
+
+![](Ragados1.png)
+
+A cső ragadóssá vált:
+
+![](Ragados2.png)
+
+Most pedig nézzük meg, mi az eredménye, ha a szabotőrrel megpróbálunk továbblépni a ragadós csőről:
+
+![](Ragados3.png)
+
+A cső végén lévő pumpára kattintva alap esetben ott lenne a továbblépés ikon, de most nincs. Ez bizonyítj a raggadós cső helyes működését, miszerint a rajta álló játékost nem engedi tovább lépni.
