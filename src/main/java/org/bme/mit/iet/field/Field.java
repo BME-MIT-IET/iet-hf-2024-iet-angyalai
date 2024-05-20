@@ -4,12 +4,13 @@ import org.bme.mit.iet.player.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Mezo os osztaly. Nyilvan tartja a szomszedjait es hogy eppen mely jatekosok allnak rajta.
  */
-public abstract class Field {
+public abstract class Field implements Serializable {
     /**
      * Az azonosito novelesehez szukseges statikus valtozo
      */
@@ -255,11 +256,11 @@ public abstract class Field {
      */
     public JSONObject toJSON() {
         JSONObject jo = new JSONObject();
-        JSONArray players = new JSONArray();
-        for (Player player : this.players) {
-            players.add(player.getId());
+        JSONArray jsonPlayers = new JSONArray();
+        for (Player player : players) {
+            jsonPlayers.add(player.getId());
         }
-        jo.put("players", players);
+        jo.put("players", jsonPlayers);
         jo.put("currentWaterLevel", currentWaterLevel);
         jo.put("capacity", capacity);
         jo.put("isWorking", isWorking);

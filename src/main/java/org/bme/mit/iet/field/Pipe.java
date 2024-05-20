@@ -38,6 +38,8 @@ public class Pipe extends Field {
      */
     private int stickyCounter;
 
+    private Random random = new Random();
+
     /**
      * A cso konstruktora. Inicializala a kapcsolodo pumpakat es jatekosok listajat.
      */
@@ -46,13 +48,6 @@ public class Pipe extends Field {
         players = new ArrayList<Player>();
         this.capacity = 1;
         this.id = idCount++;
-    }
-
-    /**
-     * Getter az azonositohoz
-     */
-    public int getId() {
-        return this.id;
     }
 
     public int getStickyCounter() {
@@ -126,8 +121,7 @@ public class Pipe extends Field {
     public Field movePlayer(Player player) {
         if (players.size() > 0) throw new IllegalStateException();
         if (isSlippery) {
-            Random rnd = new Random();
-            Field randomNeighbourPump = pumps.get(rnd.nextInt(2)).movePlayer(player);
+            Field randomNeighbourPump = pumps.get(random.nextInt(2)).movePlayer(player);
             return randomNeighbourPump;
         }
         this.addPlayer(player);
@@ -237,7 +231,6 @@ public class Pipe extends Field {
      */
     public void breakField() {
         if (piercedCounter == 0 && isWorking) {
-            Random random = new Random();
             setPiercedCounter(random.nextInt(3) + 1);
             super.breakField();
         }
@@ -250,7 +243,6 @@ public class Pipe extends Field {
     public void makeSlippery() {
         if (!isSlippery) {
             isSlippery = true;
-            Random random = new Random();
             setSlipperyCounter(random.nextInt(3) + 1);
         }
     }
@@ -265,7 +257,6 @@ public class Pipe extends Field {
     public void makeSticky() {
         if (!isSticky) {
             isSticky = true;
-            Random random = new Random();
             setStickyCounter(random.nextInt(3) + 1);
         }
     }

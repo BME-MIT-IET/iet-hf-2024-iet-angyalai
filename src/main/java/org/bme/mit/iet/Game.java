@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -16,7 +17,7 @@ import java.util.Random;
 /**
  * Singleton osztály, a játék állapotát felügyelő és “globális” feladatokat (víz folyatás, pontszámítás, pumpa hiba generálás, játékosok sorrendje) végrehajtó egység.
  */
-public class Game {
+public class Game implements Serializable {
     /**
      * A Game osztaly egyetlen peldanya
      */
@@ -58,6 +59,11 @@ public class Game {
      * A soron levo jatekos lepett-e mar
      */
     private boolean isCurrentPlayerMadeMove;
+
+    public int getAlreadyPlayed() {
+        return alreadyPlayed;
+    }
+
     /**
      * Az adott korben hany jatekos kerult mar sorra
      */

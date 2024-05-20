@@ -200,41 +200,41 @@ public class Board {
     public JSONObject toJSON() {
         JSONObject jo = new JSONObject();
 
-        JSONArray plums = new JSONArray();
-        for (Player plum : this.plums) {
-            plums.add(plum.toJSON());
+        JSONArray jsonPlums = new JSONArray();
+        for (Player plum : plums) {
+            jsonPlums.add(plum.toJSON());
         }
-        jo.put("plums", plums);
+        jo.put("plums", jsonPlums);
 
-        JSONArray sabs = new JSONArray();
-        for (Player sab : this.sabs) {
-            sabs.add(sab.toJSON());
+        JSONArray jsonSabs = new JSONArray();
+        for (Player sab : sabs) {
+            jsonSabs.add(sab.toJSON());
         }
-        jo.put("sabs", sabs);
+        jo.put("sabs", jsonSabs);
 
-        JSONArray pumps = new JSONArray();
-        for (Field pump : this.pumps) {
-            pumps.add(pump.toJSON());
+        JSONArray jsonPumps = new JSONArray();
+        for (Field pump : pumps) {
+            jsonPumps.add(pump.toJSON());
         }
-        jo.put("pumps", pumps);
+        jo.put("pumps", jsonPumps);
 
-        JSONArray pipes = new JSONArray();
-        for (Field pipe : this.pipes) {
-            pipes.add(pipe.toJSON());
+        JSONArray jsonPipes = new JSONArray();
+        for (Field pipe : pipes) {
+            jsonPipes.add(pipe.toJSON());
         }
-        jo.put("pipes", pipes);
+        jo.put("pipes", jsonPipes);
 
-        JSONArray dests = new JSONArray();
-        for (Field dest : this.dests) {
-            dests.add(dest.toJSON());
+        JSONArray jsonDests = new JSONArray();
+        for (Field dest : dests) {
+            jsonDests.add(dest.toJSON());
         }
-        jo.put("dests", dests);
+        jo.put("dests", jsonDests);
 
-        JSONArray srcs = new JSONArray();
-        for (Field src : this.srcs) {
-            srcs.add(src.toJSON());
+        JSONArray jsonSrcs = new JSONArray();
+        for (Field src : srcs) {
+            jsonSrcs.add(src.toJSON());
         }
-        jo.put("srcs", srcs);
+        jo.put("srcs", jsonSrcs);
 
         return jo;
     }

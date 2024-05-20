@@ -7,11 +7,12 @@ import org.bme.mit.iet.view.GameView;
 import org.bme.mit.iet.view.button.*;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * A csövek megjelenítésért felelős osztály
  */
-public class PipeView {
+public class PipeView implements Serializable {
     private final ActionButtonGroup btnGroup;
     private final GameView gameView;
     private final Field pipe;

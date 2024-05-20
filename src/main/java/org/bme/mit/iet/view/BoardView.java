@@ -1,7 +1,9 @@
 package org.bme.mit.iet.view;
 
 import org.bme.mit.iet.Game;
+import org.bme.mit.iet.board.Board;
 import org.bme.mit.iet.field.Field;
+import org.bme.mit.iet.field.Pump;
 import org.bme.mit.iet.player.Player;
 import org.bme.mit.iet.view.fieldview.*;
 import org.bme.mit.iet.view.playerview.PlayerView;
@@ -35,6 +37,8 @@ public class BoardView extends JPanel {
      */
     private final ArrayList<PlayerView> playerViews;
 
+    private Random random = new Random();
+
     /**
      * Konstruktor, beallitja a panel szeleit, feltolti a fieldViews, pipeViews, playerViews listakat. A button-oket
      * random pozicioba helyezi el. Hozzaad egy MouseListenert a panelhez, amely ellenorzi, hogy egy csohoz tartozo
@@ -48,61 +52,84 @@ public class BoardView extends JPanel {
         this.pipeViews = new ArrayList<>();
         this.playerViews = new ArrayList<>();
 
-        setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(4, 8, 4, 8, Color.BLACK), // Thick left border
-                BorderFactory.createEmptyBorder(0, 0, 0, 0) // Empty border for top, right, and bottom
-        ));
+        setPanelBorder();
 
         var board = Game.getInstance().getBoard();
         setLayout(null);
-        var random = new Random();
 
+        addFieldViews(gameView, btnGroup, board);
+        addPipeViews(gameView, btnGroup, board);
+        addPlayerViews(board);
+
+        addMouseListenerToPanel();
+    }
+
+    private void setPanelBorder() {
+        setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(4, 8, 4, 8, Color.BLACK), // Thick left border
+                BorderFactory.createEmptyBorder(0, 0, 0, 0) // Empty border for top, right, and bottom
+        ));
+    }
+
+    private void addFieldViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
+        addSourceViews(gameView, btnGroup, board);
+        addPumpViews(gameView, btnGroup, board);
+        addDestinationViews(gameView, btnGroup, board);
+    }
+
+    private void addSourceViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
         int x = 60 + random.nextInt(10), y = 30;
         int temp = 1;
         for (Field source : board.getSrcs()) {
             var sv = new SourceView(gameView, btnGroup, source);
-            sv.setBounds(x, y, sv.getPreferredSize().width, sv.getPreferredSize().height);
+            setViewBounds(sv, x, y);
             x += (gameView.getWidth() / board.getSrcs().size()) + temp * random.nextInt(15);
             y += temp * 15;
             temp = -temp;
-
             add(sv);
             fieldViews.add(sv);
         }
+    }
 
-        x = 50 + random.nextInt(10);
-        y = gameView.getHeight() / 3;
+    private void addPumpViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
+        int x = 50 + random.nextInt(10);
+        int y = gameView.getHeight() / 3;
+        int temp = 1;
         for (Field pump : board.getPumps()) {
-            String fileNameIfWorkingOrNot;
-            if (pump.isWorking()) fileNameIfWorkingOrNot = "pump";
-            else fileNameIfWorkingOrNot = "pump-not-working";
+            String fileNameIfWorkingOrNot = pump.isWorking() ? "pump" : "pump-not-working";
             var pv = new PumpView(gameView, btnGroup, pump, fileNameIfWorkingOrNot);
-            pv.setBounds(x, y, pv.getPreferredSize().width, pv.getPreferredSize().height);
+            setViewBounds(pv, x, y);
             x += (gameView.getWidth() / board.getPumps().size()) + temp * random.nextInt(15);
             y += temp * new Random().nextInt(150);
             temp = -temp;
             add(pv);
             fieldViews.add(pv);
         }
+    }
 
-
-        x = 60 + random.nextInt(10);
-        y = (2 * gameView.getHeight()) / 3;
-
+    private void addDestinationViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
+        int x = 60 + random.nextInt(10);
+        int y = (2 * gameView.getHeight()) / 3;
+        int temp = 1;
         for (Field destination : board.getDests()) {
             var dv = new DestView(gameView, btnGroup, destination);
-            dv.setBounds(x, y, dv.getPreferredSize().width, dv.getPreferredSize().height);
+            setViewBounds(dv, x, y);
             x += (gameView.getWidth() / board.getDests().size()) + temp * 5 + temp * random.nextInt(15);
             y += temp * 15;
             temp = -temp;
             add(dv);
             fieldViews.add(dv);
         }
+    }
 
+    private void addPipeViews(GameView gameView, ActionButtonGroup btnGroup, Board board) {
         for (Field pipe : board.getPipes()) {
             var pv = new PipeView(gameView, btnGroup, pipe);
             pipeViews.add(pv);
         }
+    }
 
+    private void addPlayerViews(Board board) {
         for (Player plumber : board.getPlums()) {
             playerViews.add(new PlumberView(plumber));
         }
@@ -110,7 +137,13 @@ public class BoardView extends JPanel {
         for (Player saboteur : board.getSabs()) {
             playerViews.add(new SaboteurView(saboteur));
         }
+    }
 
+    private void setViewBounds(JComponent view, int x, int y) {
+        view.setBounds(x, y, view.getPreferredSize().width, view.getPreferredSize().height);
+    }
+
+    private void addMouseListenerToPanel() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -129,6 +162,7 @@ public class BoardView extends JPanel {
         });
     }
 
+
     /**
      * A csovek, jatekosok es a hatter kirajzolasaert felelos fuggveny. A jatekosok amellett a mezo mellett jelennek
      * meg, ahol jelenleg allnak.
@@ -138,7 +172,19 @@ public class BoardView extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        var filePath = "assets/board/desert.png";
+        drawBackgroundImage(g, "assets/board/desert.png");
+        Graphics2D g2d = (Graphics2D) g;
+
+        for (PipeView pipeView : pipeViews) {
+            setPipeEndpoints(pipeView);
+            drawPipe(g2d, pipeView);
+        }
+
+        drawPlayersOnFields(g);
+        drawPlayersOnPipes(g);
+    }
+
+    private void drawBackgroundImage(Graphics g, String filePath) {
         try {
             var inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
             if (inputStream != null) {
@@ -146,136 +192,130 @@ public class BoardView extends JPanel {
                 var scaledImage = image.getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                 g.drawImage(scaledImage, 0, 0, null);
             } else {
-                JOptionPane.showMessageDialog(null, "Image not found: " + filePath, "Error", JOptionPane.ERROR_MESSAGE);
+                showErrorMessage("Image not found: " + filePath);
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+            showErrorMessage(e.toString());
         }
-        var g2d = (Graphics2D) g;
+    }
 
-        Dimension buttonSize;
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
-        for (PipeView pipeView : pipeViews) {
-            var pipe = pipeView.getField();
-            var pumps = pipe.getNeighbours();
+    private void setPipeEndpoints(PipeView pipeView) {
+        var pipe = pipeView.getField();
+        var pumps = pipe.getNeighbours();
 
-            if (pumps.size() == 2) {
-                for (PumpLikeFieldView fieldView : fieldViews) {
-                    var field = fieldView.getField();
-                    buttonSize = fieldView.getSize();
-
-                    if (field == pumps.get(0)) {
-                        pipeView.setStartPoint(new Point(fieldView.getLocation().x + buttonSize.width / 2, fieldView.getLocation().y + buttonSize.height / 2));
-                    }
-                    if (field == pumps.get(1)) {
-                        pipeView.setEndPoint(new Point(fieldView.getLocation().x + buttonSize.width / 2, fieldView.getLocation().y + buttonSize.height / 2));
-                    }
-                }
-
-                //kirajzoljuk a cso ket szelet
-                if (pipe.isSticky()) {
-                    g2d.setColor(Color.GREEN);
-                } else if (pipe.isSlippery()) {
-                    g2d.setColor(Color.YELLOW);
-                } else g2d.setColor(Color.BLACK);
-
-                g2d.setStroke(new BasicStroke(7));
-                g2d.drawLine(pipeView.getStartPoint().x, pipeView.getStartPoint().y, pipeView.getEndPoint().x, pipeView.getEndPoint().y);
-
-                //kirajzoljuk a cso kozepet
-                if (!pipe.isWorking()) {
-                    g2d.setColor(Color.RED);
-                } else if (pipe.getCurrentWaterLevel() > 0) {
-                    g2d.setColor(Color.BLUE);
-                } else g2d.setColor(Color.BLACK);
-
-                g2d.setStroke(new BasicStroke(3));
-                g2d.drawLine(pipeView.getStartPoint().x, pipeView.getStartPoint().y, pipeView.getEndPoint().x, pipeView.getEndPoint().y);
-
-            } else if (pumps.size() == 1) {
-                for (PumpLikeFieldView fieldView : fieldViews) {
-                    if (fieldView.getField() == pumps.get(0)) {
-                        var r = new Random();
-                        buttonSize = fieldView.getSize();
-                        pipeView.setStartPoint(new Point(fieldView.getLocation().x + buttonSize.width / 2, fieldView.getLocation().y + buttonSize.height / 2));
-                        var xdif = r.nextInt(100) - 50;
-                        var ydif = r.nextInt(100) - 50;
-                        pipeView.setEndPoint(new Point(fieldView.getLocation().x + buttonSize.width / 2 + (xdif < 0 ? -25 + xdif : 25 + xdif), fieldView.getLocation().y + buttonSize.height / 2 + (ydif < 0 ? -25 + ydif : 25 + ydif)));
-                    }
-                }
-
-                //kirajzoljuk a cso ket szelet
-                if (pipe.isSticky()) {
-                    g2d.setColor(Color.GREEN);
-                } else if (pipe.isSlippery()) {
-                    g2d.setColor(Color.YELLOW);
-                } else g2d.setColor(Color.BLACK);
-
-                g2d.setStroke(new BasicStroke(7));
-                g2d.drawLine(pipeView.getStartPoint().x, pipeView.getStartPoint().y, pipeView.getEndPoint().x, pipeView.getEndPoint().y);
-
-                //kirajzoljuk a cso kozepet
-                if (!pipe.isWorking()) {
-                    g2d.setColor(Color.RED);
-                } else if (pipe.getCurrentWaterLevel() > 0) {
-                    g2d.setColor(Color.BLUE);
-                } else g2d.setColor(Color.BLACK);
-
-                g2d.setStroke(new BasicStroke(3));
-                g2d.drawLine(pipeView.getStartPoint().x, pipeView.getStartPoint().y, pipeView.getEndPoint().x, pipeView.getEndPoint().y);
-
-            } else {
-                System.out.println(pipeView.getField().getId());
-            }
+        if (pumps.size() == 2) {
+            setPipeEndpointsForTwoPumps(pipeView, pumps);
+        } else if (pumps.size() == 1) {
+            setPipeEndpointsForOnePump(pipeView, pumps.get(0));
         }
+    }
 
-        Image playerImage;
-
+    private void setPipeEndpointsForTwoPumps(PipeView pipeView, ArrayList<Field> pumps) {
         for (PumpLikeFieldView fieldView : fieldViews) {
-            var player = fieldView.getField().getPlayers();
-            if (player.size() != 0) {
-                for (PlayerView playerView : playerViews) {
-                    var p = playerView.getPlayer();
-                    var center = new Point(fieldView.getBounds().x, fieldView.getBounds().y);
-                    var radius = 55;
-                    var theta = 2 * Math.PI / player.size();
-                    var c = 1;
-                    for (Player pl : player) {
-                        if (pl == p) {
-                            if (pl == Game.getInstance().getCurrentPlayer()) {
-                                playerImage = playerView.loadPlayerImage("-current");
-                            } else {
-                                playerImage = playerView.loadPlayerImage("");
-                            }
-                            var angle = c * theta;
-                            var x = (int) (center.x + radius * Math.cos(angle));
-                            var y = (int) (center.y + radius * Math.sin(angle));
-                            g.drawImage(playerImage, x, y, null);
-                        }
-                        c++;
-                    }
-                }
-            }
-        }
+            var field = fieldView.getField();
+            Dimension buttonSize = fieldView.getSize();
 
-        for (var pipeView : pipeViews) {
-            var player = pipeView.getField().getPlayers();
-            if (player.size() != 0) {
-                for (var playerView : playerViews) {
-                    var p = playerView.getPlayer();
-                    var center = new Point((pipeView.getStartPoint().x + pipeView.getEndPoint().x) / 2, (pipeView.getStartPoint().y + pipeView.getEndPoint().y) / 2);
-                    for (var pl : player) {
-                        if (pl == p) {
-                            if (pl == Game.getInstance().getCurrentPlayer()) {
-                                playerImage = playerView.loadPlayerImage("-current");
-                            } else {
-                                playerImage = playerView.loadPlayerImage("");
-                            }
-                            g.drawImage(playerImage, center.x, center.y, null);
-                        }
-                    }
-                }
+            if (field == pumps.get(0)) {
+                pipeView.setStartPoint(getFieldCenter(fieldView));
+            }
+            if (field == pumps.get(1)) {
+                pipeView.setEndPoint(getFieldCenter(fieldView));
             }
         }
     }
+
+    private void setPipeEndpointsForOnePump(PipeView pipeView, Field pump) {
+        for (PumpLikeFieldView fieldView : fieldViews) {
+            if (fieldView.getField() == pump) {
+                var r = new Random();
+                Dimension buttonSize = fieldView.getSize();
+                pipeView.setStartPoint(getFieldCenter(fieldView));
+                var xdif = r.nextInt(100) - 50;
+                var ydif = r.nextInt(100) - 50;
+                pipeView.setEndPoint(new Point(fieldView.getLocation().x + buttonSize.width / 2 + adjustCoordinate(xdif), fieldView.getLocation().y + buttonSize.height / 2 + adjustCoordinate(ydif)));
+            }
+        }
+    }
+
+    private int adjustCoordinate(int coord) {
+        return coord < 0 ? -25 + coord : 25 + coord;
+    }
+
+    private Point getFieldCenter(PumpLikeFieldView fieldView) {
+        Dimension buttonSize = fieldView.getSize();
+        return new Point(fieldView.getLocation().x + buttonSize.width / 2, fieldView.getLocation().y + buttonSize.height / 2);
+    }
+    //kirajzoljuk a csovet
+    private void drawPipe(Graphics2D g2d, PipeView pipeView) {
+        var pipe = pipeView.getField();
+        //kirajzoljuk a cso ket szelet
+        drawPipeSection(g2d, pipeView, pipe.isSticky() ? Color.GREEN : pipe.isSlippery() ? Color.YELLOW : Color.BLACK, 7);
+        //kirajzoljuk a cso kozepet
+        drawPipeSection(g2d, pipeView, pipe.isWorking() ? (pipe.getCurrentWaterLevel() > 0 ? Color.BLUE : Color.BLACK) : Color.RED, 3);
+    }
+
+    private void drawPipeSection(Graphics2D g2d, PipeView pipeView, Color color, int stroke) {
+        g2d.setColor(color);
+        g2d.setStroke(new BasicStroke(stroke));
+        g2d.drawLine(pipeView.getStartPoint().x, pipeView.getStartPoint().y, pipeView.getEndPoint().x, pipeView.getEndPoint().y);
+    }
+
+    private void drawPlayersOnFields(Graphics g) {
+        for (PumpLikeFieldView fieldView : fieldViews) {
+            var players = fieldView.getField().getPlayers();
+            if (!players.isEmpty()) {
+                drawPlayers(g, fieldView, players);
+            }
+        }
+    }
+
+    private void drawPlayersOnPipes(Graphics g) {
+        for (var pipeView : pipeViews) {
+            var players = pipeView.getField().getPlayers();
+            if (!players.isEmpty()) {
+                drawPlayersOnPipe(g, pipeView, players);
+            }
+        }
+    }
+
+    private void drawPlayers(Graphics g, PumpLikeFieldView fieldView, ArrayList<Player> players) {
+        var center = new Point(fieldView.getBounds().x, fieldView.getBounds().y);
+        var radius = 55;
+        var theta = 2 * Math.PI / players.size();
+        int c = 1;
+        for (Player player : players) {
+            drawPlayer(g, center, radius, theta, c, player);
+            c++;
+        }
+    }
+
+    private void drawPlayersOnPipe(Graphics g, PipeView pipeView, ArrayList<Player> players) {
+        var center = new Point((pipeView.getStartPoint().x + pipeView.getEndPoint().x) / 2, (pipeView.getStartPoint().y + pipeView.getEndPoint().y) / 2);
+        for (var player : players) {
+            drawPlayerImage(g, center, player);
+        }
+    }
+
+    private void drawPlayer(Graphics g, Point center, int radius, double theta, int c, Player player) {
+        var angle = c * theta;
+        var x = (int) (center.x + radius * Math.cos(angle));
+        var y = (int) (center.y + radius * Math.sin(angle));
+        drawPlayerImage(g, new Point(x, y), player);
+    }
+
+    private void drawPlayerImage(Graphics g, Point position, Player player) {
+        Image playerImage;
+        var currentPlayer = Game.getInstance().getCurrentPlayer();
+        for (PlayerView playerView : playerViews) {
+            if (playerView.getPlayer() == player) {
+                playerImage = playerView.loadPlayerImage(player == currentPlayer ? "-current" : "");
+                g.drawImage(playerImage, position.x, position.y, null);
+            }
+        }
+    }
+
 }

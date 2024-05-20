@@ -53,14 +53,5 @@ public class Source extends Pump {
         return amount;
     }
 
-    /**
-     * Getter az azonositohoz
-     *
-     * @return az azonosito
-     */
-    public int getId() {
-        return this.id;
-    }
-
 
 }
