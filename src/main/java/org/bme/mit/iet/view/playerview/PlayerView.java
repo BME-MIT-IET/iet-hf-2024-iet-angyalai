@@ -13,7 +13,7 @@ public abstract class PlayerView implements Serializable {
     /**
      * A PlayerView-hoz tartozo jatekos
      */
-    protected final Player player;
+    protected final transient Player player;
 
     public PlayerView(Player player) {
         this.player = player;

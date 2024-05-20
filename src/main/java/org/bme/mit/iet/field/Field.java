@@ -18,7 +18,7 @@ public abstract class Field implements Serializable {
     /**
      * A mezon tartozkodo jatekosok listaja
      */
-    protected ArrayList<Player> players;
+    protected transient ArrayList<Player> players;
     /**
      * A mezo tartalyaban tarolt viz mindenkori mennyisege
      */
