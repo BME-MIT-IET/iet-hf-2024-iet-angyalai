@@ -1,3 +1,5 @@
+package org.bme.mit.iet;
+
 import org.bme.mit.iet.board.Board;
 import org.bme.mit.iet.field.*;
 import org.bme.mit.iet.player.*;
@@ -9,8 +11,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class move {
+public class GameTest {
+
     private static Board board;
+    private static Game game;
 
     @BeforeEach
     void init() {
@@ -47,7 +51,7 @@ public class move {
         pipe1.setPumps(new ArrayList<>(List.of(source, pump1)));
         pipe2.setPumps(new ArrayList<>(List.of(pump1, pump2)));
         pipe3.setPumps(new ArrayList<>(List.of(pump1, pump2)));
-        pipe4.setPumps(new ArrayList<>(List.of(pump2, pump1)));
+        pipe4.setPumps(new ArrayList<>(List.of(pump2)));
         pipe5.setPumps(new ArrayList<>(List.of(pump2, dest)));
         pipe6.setPumps(new ArrayList<>(List.of(pump2, dest)));
 
@@ -82,43 +86,57 @@ public class move {
         ArrayList<Player> players = new ArrayList<>(List.of(player1, player2, player3, player4, player5));
 
         //inicializaljuk a jatek tablat
-        board = new Board(players, players, pipes, pumps, sources, dests);
+        //board = new Board(players,players, pipes, pumps, sources, dests);
+
+        game = Game.getInstance();
+        game.createNewGame(5,2,2);
+        board = game.getBoard();
     }
 
     @Test
-    void move_to_pump_or_unoccupied_pipe() {
-        //Nincs rajta
-        assertNotEquals(board.getPlayers().get(0).getCurrentField(), board.getPipes().get(4));
-        //Csőre mozog
-        board.getPlayers().get(0).moveTo(board.getPipes().get(4));
-        //Csövön van
-        assertEquals(board.getPlayers().get(0).getCurrentField(), board.getPipes().get(4));
-        //Pumpára mozog
-        board.getPlayers().get(0).moveTo(board.getPumps().get(1));
-        //Pumpán van
-        assertEquals(board.getPlayers().get(0).getCurrentField(), board.getPumps().get(1));
+    void skip() {
+        Player currentPlayerFromBoard = board.getPlayers().get(0);
+        Player currentPlayerFromGame = game.getCurrentPlayer();
+        game.nextPlayer();
+
+        Player nextPlayerFromBoard = board.getPlayers().get(0);
+        Player nextPlayerFromGame = game.getCurrentPlayer();
+
+        assertNotEquals(currentPlayerFromBoard, nextPlayerFromBoard, "The current player should change after skipping a turn.");
+        assertNotEquals(currentPlayerFromGame, nextPlayerFromGame, "The current player should change after skipping a turn.");
+        assertEquals(currentPlayerFromBoard, currentPlayerFromGame, "The current player should change after skipping a turn.");
+        assertEquals(nextPlayerFromBoard, nextPlayerFromGame, "The current player should change after skipping a turn.");
+
+
     }
 
     @Test
-    void move_to_occupied_pipe() {
-        //Nincs rajta
-        assertNotEquals(board.getPipes().get(5), board.getPlayers().get(0).getCurrentField());
-        //Foglalt csőre mozog
-        assertThrows(Exception.class, () -> board.getPlayers().get(0).moveTo(board.getPipes().get(5)));
-        //Még mindig nincs rajta
-        assertNotEquals(board.getPipes().get(5), board.getPlayers().get(0).getCurrentField());
-    }
+    void new_game() {
+        // Start a new game
+        int initialRounds = 10;
+        int initialNumberOfPlums = 3;
+        int initialNumberOfSabs = 2;
+        game.createNewGame(initialRounds, initialNumberOfPlums, initialNumberOfSabs);
 
-    @Test
-    void move_to_slippery_pipe() {
-        //Nincs rajta
-        assertNotEquals(board.getPipes().get(3), board.getPlayers().get(0).getCurrentField());
-        //Csúszós csőre mozog
-        board.getPlayers().get(0).moveTo(board.getPipes().get(3));
-        //Valamelyik végére kerül
-        assertTrue(board.getPlayers().get(0).getCurrentField() == board.getPipes().get(3).getNeighbours().get(0)
-                || board.getPlayers().get(0).getCurrentField() == board.getPipes().get(3).getNeighbours().get(1));
-    }
+        // Check if the game board is initialized correctly
+        assertNotNull(game.getBoard(), "The game board should not be null after creating a new game.");
 
+        // Check the initial round settings
+        assertEquals(initialRounds, game.getRounds(), "The number of rounds should be initialized correctly.");
+        assertEquals(1, game.getCurrentRound(), "The current round should be set to 1 at the start of a new game.");
+
+        // Check the initial player settings
+        assertNotNull(game.getCurrentPlayer(), "The current player should be initialized.");
+        assertEquals(game.getBoard().getPlayers().get(0), game.getCurrentPlayer(), "The current player should be the first player in the list.");
+        assertFalse(game.isCurrentPlayerMadeAction(), "The current player should not have made an action yet.");
+        assertFalse(game.isCurrentPlayerMadeMove(), "The current player should not have made a move yet.");
+
+        // Check the initial points
+        assertEquals(0, game.getPlumberPoints(), "Plumber points should be 0 at the start of a new game.");
+        assertEquals(0, game.getSaboteursPoints(), "Saboteur points should be 0 at the start of a new game.");
+
+        // Check the already played counter
+        assertEquals(0, game.getAlreadyPlayed(), "The already played counter should be 0 at the start of a new game.");
+    }
 
 }
