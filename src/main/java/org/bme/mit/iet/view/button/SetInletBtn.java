@@ -40,4 +40,3 @@ public class SetInletBtn extends ActionButton {
         });
     }
 }
-
