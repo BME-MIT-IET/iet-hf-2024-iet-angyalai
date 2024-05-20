@@ -100,7 +100,7 @@ public class BoardView extends JPanel {
             var pv = new PumpView(gameView, btnGroup, pump, fileNameIfWorkingOrNot);
             setViewBounds(pv, x, y);
             x += (gameView.getWidth() / board.getPumps().size()) + temp * random.nextInt(15);
-            y += temp * new Random().nextInt(150);
+            y += temp * random.nextInt(150);
             temp = -temp;
             add(pv);
             fieldViews.add(pv);
@@ -231,11 +231,10 @@ public class BoardView extends JPanel {
     private void setPipeEndpointsForOnePump(PipeView pipeView, Field pump) {
         for (PumpLikeFieldView fieldView : fieldViews) {
             if (fieldView.getField() == pump) {
-                var r = new Random();
                 Dimension buttonSize = fieldView.getSize();
                 pipeView.setStartPoint(getFieldCenter(fieldView));
-                var xdif = r.nextInt(100) - 50;
-                var ydif = r.nextInt(100) - 50;
+                var xdif = random.nextInt(100) - 50;
+                var ydif = random.nextInt(100) - 50;
                 pipeView.setEndPoint(new Point(fieldView.getLocation().x + buttonSize.width / 2 + adjustCoordinate(xdif), fieldView.getLocation().y + buttonSize.height / 2 + adjustCoordinate(ydif)));
             }
         }
