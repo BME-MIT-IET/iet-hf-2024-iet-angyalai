@@ -39,6 +39,14 @@ public class BoardView extends JPanel {
 
     private Random random = new Random();
 
+    /**
+     * Konstruktor, beallitja a panel szeleit, feltolti a fieldViews, pipeViews, playerViews listakat. A button-oket
+     * random pozicioba helyezi el. Hozzaad egy MouseListenert a panelhez, amely ellenorzi, hogy egy csohoz tartozo
+     * vonalra kattintottunk-e.
+     *
+     * @param gameView
+     * @param btnGroup
+     */
     public BoardView(GameView gameView, ActionButtonGroup btnGroup) {
         this.fieldViews = new ArrayList<>();
         this.pipeViews = new ArrayList<>();
