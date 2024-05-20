@@ -30,11 +30,11 @@ public class Game implements Serializable {
     /**
      * Jatekot alkoto palya
      */
-    private Board board;
+    private transient Board board;
     /**
      * Az aktualisan soron levo jatekos
      */
-    private Player currentPlayer;
+    private transient Player currentPlayer;
     /**
      * A korok szama
      */
