@@ -128,44 +128,49 @@ public class FileHandler {
         JSONArray objects = (JSONArray) jo.get(key);
         Iterator<?> itr1 = objects.iterator();
         int i = 0;
-        String constant = PIPES;
-        if (key.equals(PIPES))
-            constant = PUMPS;
+        String constant = key.equals(PIPES) ? PUMPS : PIPES;
 
         while (itr1.hasNext()) {
             JSONObject object = (JSONObject) itr1.next();
 
-            ArrayList<Field> neighboursB = new ArrayList<>();
-            JSONArray neighbours = (JSONArray) object.get(constant);
-            Iterator<?> itr2 = neighbours.iterator();
-            while (itr2.hasNext()) {
-                long neighbour = (long) itr2.next();
-                neighboursB.add(searchField(fieldsL, (int) neighbour));
-            }
-            elementsL.get(i).setNeighbours(neighboursB);
-
-            if (key.equals(PUMPS) || key.equals("srcs") || key.equals(DESTINATIONS)) {
-                elementsL.get(i).setInOutlet(object.get(INLET) != null ? searchField(fieldsL, (int) (long) object.get(INLET)) : null,
-                    object.get(OUTLET) != null ? searchField(fieldsL, (int) (long) object.get(OUTLET)) : null);
-            }
-
-            ArrayList<Player> playersB = new ArrayList<>();
-            JSONArray players = (JSONArray) object.get(PLAYERS);
-            itr2 = players.iterator();
-            while (itr2.hasNext()) {
-                long player = (long) itr2.next();
-                playersB.add(searchPlayer(playersL, (int) player));
-            }
-            elementsL.get(i).setPlayers(playersB);
+            setFieldNeighbours(object, constant, elementsL, fieldsL, i);
+            setFieldPlayers(object, elementsL, playersL, i);
 
             if (key.equals(DESTINATIONS)) {
                 elementsL.get(i).setPump(searchField(elementsL, (int) (long) object.get("pump")));
                 elementsL.get(i).setPipe(searchField(elementsL, (int) (long) object.get("pipe")));
             }
-
             i++;
         }
     }
+
+    private void setFieldNeighbours(JSONObject object, String constant, ArrayList<Field> elementsL, ArrayList<Field> fieldsL, int index) {
+        ArrayList<Field> neighboursB = new ArrayList<>();
+        JSONArray neighbours = (JSONArray) object.get(constant);
+        Iterator<?> itr2 = neighbours.iterator();
+        while (itr2.hasNext()) {
+            long neighbour = (long) itr2.next();
+            neighboursB.add(searchField(fieldsL, (int) neighbour));
+        }
+        elementsL.get(index).setNeighbours(neighboursB);
+    
+        if (constant.equals(PUMPS) || constant.equals("srcs") || constant.equals(DESTINATIONS)) {
+            elementsL.get(index).setInOutlet(object.get(INLET) != null ? searchField(fieldsL, (int) (long) object.get(INLET)) : null,
+                object.get(OUTLET) != null ? searchField(fieldsL, (int) (long) object.get(OUTLET)) : null);
+        }
+    }
+
+    private void setFieldPlayers(JSONObject object, ArrayList<Field> elementsL, ArrayList<Player> playersL, int index) {
+        ArrayList<Player> playersB = new ArrayList<>();
+        JSONArray players = (JSONArray) object.get(PLAYERS);
+        Iterator<?> itr2 = players.iterator();
+        while (itr2.hasNext()) {
+            long player = (long) itr2.next();
+            playersB.add(searchPlayer(playersL, (int) player));
+        }
+        elementsL.get(index).setPlayers(playersB);
+    }    
+    
 
     private ArrayList<Player> createPlayers(JSONObject jo, String key, ArrayList<Field> fields) {
         JSONArray objects = (JSONArray) jo.get(key);
